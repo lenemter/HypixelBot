@@ -3,8 +3,9 @@ from discord.ext import commands
 import logging
 
 from common import TOKEN, COMMAND_PREFIX
-from news_reminder import NewsReminder
-from hypixel_stats import HypixelStats
+from bots.news import News
+from bots.news_reminder import NewsReminder
+from bots.hypixel_stats import HypixelStats
 
 
 def setup_logging():
@@ -22,6 +23,7 @@ def start_bot():
     intents.members = True
 
     bot = commands.Bot(command_prefix=COMMAND_PREFIX, intents=intents)
+    bot.add_cog(News(bot))
     bot.add_cog(NewsReminder(bot))
     bot.add_cog(HypixelStats(bot))
 
