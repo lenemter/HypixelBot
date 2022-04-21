@@ -3,7 +3,7 @@ import sqlalchemy
 import sqlalchemy.orm
 import sqlalchemy.ext.declarative
 
-SqlAlchemyBase = sqlalchemy.ext.declarative.declarative_base()
+Base = sqlalchemy.ext.declarative.declarative_base()
 
 __factory = None
 
@@ -26,7 +26,7 @@ def global_init(db_file):
 
     from . import __all_models
 
-    SqlAlchemyBase.metadata.create_all(engine)
+    Base.metadata.create_all(engine)
 
 
 def create_session() -> sqlalchemy.orm.Session:

@@ -6,6 +6,7 @@ from common import TOKEN, COMMAND_PREFIX
 from bots.news import News
 from bots.news_reminder import NewsReminder
 from bots.hypixel_stats import HypixelStats
+from bots.music import Music
 
 
 def setup_logging():
@@ -26,6 +27,7 @@ def start_bot():
     bot.add_cog(News(bot))
     bot.add_cog(NewsReminder(bot))
     bot.add_cog(HypixelStats(bot))
+    bot.add_cog(Music(bot))
 
     bot.run(TOKEN)
 

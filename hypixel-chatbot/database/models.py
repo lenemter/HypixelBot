@@ -1,23 +1,24 @@
-import datetime
-import sqlalchemy
-from .db_session import SqlAlchemyBase
+from sqlalchemy import *
+from sqlalchemy.orm import relationship
+from .db_session import Base
 
 
-class News(SqlAlchemyBase):
+class News(Base):
     __tablename__ = "news"
 
-    id = sqlalchemy.Column(
-        sqlalchemy.Integer, nullable=False, unique=True, primary_key=True
-    )
-    title = sqlalchemy.Column(sqlalchemy.String, nullable=False)
-    link = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    id = Column(Integer, primary_key=True)
+    title = Column(String, nullable=False)
+    link = Column(String, nullable=False)
 
 
-class Reminders(SqlAlchemyBase):
-    __tablename__ = "reminders"
+class User(Base):
+    __tablename__ = "users"
 
-    id = sqlalchemy.Column(
-        sqlalchemy.Integer, nullable=False, unique=True, primary_key=True
-    )
-    title = sqlalchemy.Column(sqlalchemy.String, nullable=False)
-    link = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    id = Column(Integer, primary_key=True)
+
+
+class Music(Base):
+    __tablename__ = "music"
+
+    id = Column(Integer, primary_key=True)
+    user = relationship("Users")

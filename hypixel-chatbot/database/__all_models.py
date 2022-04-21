@@ -1,1 +1,1 @@
-from models import News
+from .models import *
