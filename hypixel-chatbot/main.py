@@ -9,7 +9,7 @@ from common import TOKEN, COMMAND_PREFIX, DATABASE_PATH
 # This is here for bots imports
 global_init(DATABASE_PATH)
 
-from bots.news import News
+from bots.news import NewsBot
 from bots.hypixel_stats import HypixelStats
 from bots.music import MusicBot
 
@@ -42,7 +42,7 @@ def start_bot():
 
     bot = HypixelBot(command_prefix=COMMAND_PREFIX, intents=intents)
 
-    bot.add_cog(News(bot))
+    bot.add_cog(NewsBot(bot))
     bot.add_cog(HypixelStats(bot))
     bot.add_cog(MusicBot(bot))
 

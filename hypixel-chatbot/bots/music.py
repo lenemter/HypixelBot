@@ -18,7 +18,6 @@ session = create_session()
 
 MUSIC_TITLES = [
     "Вот ваша музыка",
-    "Вот музыка",
     "Музыка",
     "Minecraft Music",
 ]
@@ -70,7 +69,7 @@ def get_current_month_and_year() -> tuple:
 def generate_stats_description(music_query):
     count = sum((song.count for song in music_query))
     count_str = f"Количество: {count}"
-    top_3_title = "Топ 3:" if count else ""
+    top_3_title = f"Топ {min(count, 3)}:" if count else ""
     top_3 = (f"* {song.title}" for song in music_query[:3])
 
     return "\n".join((count_str, top_3_title, *top_3))
