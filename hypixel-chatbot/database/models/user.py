@@ -6,5 +6,5 @@ from ..db_session import Base
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, unique=True)
+    id = Column(Integer, primary_key=True)
     music = relationship("Music", back_populates="user")

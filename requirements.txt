@@ -1,3 +1,5 @@
 discord.py
 schedule
 bs4
+sqlalchemy
+requests

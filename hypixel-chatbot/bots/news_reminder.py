@@ -62,7 +62,7 @@ class NewsReminder(commands.Cog):
             )
             await ctx.send(embed=embed)
 
-    @reminder.command()
+    @reminder.command
     async def set(self, ctx: Context, where: str = ""):
         if not where:
             embed = Embed(
@@ -101,7 +101,7 @@ class NewsReminder(commands.Cog):
             )
             await ctx.send(embed=embed)
 
-    @reminder.command()
+    @reminder.command
     async def remove(self, ctx: Context, where: str = ""):
         if not where:
             embed = Embed(

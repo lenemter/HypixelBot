@@ -1,27 +1,170 @@
 import os
 import random
+import locale
 from pathlib import Path
+import datetime
+import calendar
 from discord import Embed, File
 from discord.ext import commands
 from discord.ext.commands.context import Context
 
 from common import SUCCESS_COLOR
+from database.db_session import create_session
+from database.__all_models import Music
+
+locale.setlocale(locale.LC_ALL, "ru_RU")
+session = create_session()
 
 
-class Music(commands.Cog):
+MUSIC_TITLES = [
+    "Вот ваша музыка",
+    "Вот музыка",
+    "Музыка",
+    "Minecraft Music",
+]
+
+MUSIC_STATS_TITLES = ["Статистика музыки", "Музыкальная статистика"]
+
+
+def get_song(user_id: int, title: str, month, year):
+    """Gets song by params, if result is None, new music object will be created automatically"""
+    song = (
+        session.query(Music)
+        .filter(
+            (Music.user_id == user_id)
+            & (Music.title == title)
+            & (Music.month == month)
+            & (Music.year == year)
+        )
+        .first()
+    )
+
+    if song is None:
+        song = Music(user_id=user_id, title=title, month=month, year=year)
+        session.add(song)
+        session.commit()
+
+    return song
+
+
+def get_user_music(user_id: int, month, year) -> list:
+    query = (
+        session.query(Music)
+        .filter(
+            (Music.user_id == user_id) & (Music.month == month) & (Music.year == year)
+        )
+        .order_by(Music.count)
+        .all()
+    )
+    return list(query)
+
+
+def get_current_month_and_year() -> tuple:
+    current_date = datetime.date.today()
+    month = current_date.month
+    year = current_date.year
+
+    return month, year
+
+
+def generate_stats_description(music_query):
+    count = sum((song.count for song in music_query))
+    count_str = f"Количество: {count}"
+    top_3_title = "Топ 3:" if count else ""
+    top_3 = (f"* {song.title}" for song in music_query[:3])
+
+    return "\n".join((count_str, top_3_title, *top_3))
+
+
+class MusicBot(commands.Cog):
     def __init__(self, bot, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.bot = bot
 
-    @commands.command(name="music")
-    async def news(self, ctx: Context):
-        file_path = Path("music/" + random.choice(os.listdir("music/")))
-        file = File(file_path.absolute())
+    @commands.group(name="music")
+    async def music(self, ctx: Context):
+        if ctx.invoked_subcommand is None:
+            file_path = Path("music/" + random.choice(os.listdir("music/")))
+            file = File(file_path.absolute())
+
+            music_title = file_path.stem
+            user_id = ctx.author.id
+            month, year = get_current_month_and_year()
+
+            embed = Embed(
+                title=random.choice(MUSIC_TITLES),
+                description=music_title,
+                color=SUCCESS_COLOR,
+            )
+            await ctx.send(embed=embed)
+            await ctx.send(file=file)
+
+            user_song_all = get_song(
+                user_id=user_id, title=music_title, month=None, year=None
+            )
+            user_song_month = get_song(
+                user_id=user_id, title=music_title, month=month, year=year
+            )
+            user_song_year = get_song(
+                user_id=user_id, title=music_title, month=None, year=year
+            )
+            all_song_all = get_song(
+                user_id=-1, title=music_title, month=None, year=None
+            )
+            all_song_month = get_song(
+                user_id=-1, title=music_title, month=month, year=year
+            )
+            all_song_year = get_song(
+                user_id=-1, title=music_title, month=None, year=year
+            )
+
+            user_song_all.count += 1
+            user_song_month.count += 1
+            user_song_year.count += 1
+            all_song_all.count += 1
+            all_song_month.count += 1
+            all_song_year.count += 1
+
+            session.commit()
+
+    @music.command()
+    async def stats(self, ctx: Context):
+        user_id = ctx.author.id
+        month, year = get_current_month_and_year()
+        month_name = calendar.month_name[month]
+
+        user_song_all = get_user_music(user_id=user_id, month=None, year=None)
+        user_song_month = get_user_music(user_id=user_id, month=month, year=year)
+        all_song_all = get_user_music(user_id=-1, month=None, year=None)
+        all_song_month = get_user_music(user_id=-1, month=month, year=year)
+
         embed = Embed(
-            title=f"Вот ваша музыка:",
-            description=file_path.stem,
+            title=random.choice(MUSIC_STATS_TITLES),
             color=SUCCESS_COLOR,
         )
+
+        # User
+        embed.add_field(
+            name=f"Ваша музыка за {month_name}",
+            value=generate_stats_description(user_song_month),
+            inline=False,
+        )
+        embed.add_field(
+            name="Ваша музыка за всё время",
+            value=generate_stats_description(user_song_all),
+            inline=False,
+        )
+
+        # All
+        embed.add_field(
+            name=f"Вся музыка за {month_name}",
+            value=generate_stats_description(all_song_month),
+            inline=False,
+        )
+        embed.add_field(
+            name="Вся музыка за всё время",
+            value=generate_stats_description(all_song_all),
+            inline=False,
+        )
         await ctx.send(embed=embed)
-        await ctx.send(file=file)
