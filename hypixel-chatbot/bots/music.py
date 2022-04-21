@@ -19,7 +19,7 @@ class Music(commands.Cog):
         file_path = Path("music/" + random.choice(os.listdir("music/")))
         file = File(file_path.absolute())
         embed = Embed(
-            title=f"Here is your random music",
+            title=f"Вот ваша музыка:",
             description=file_path.stem,
             color=SUCCESS_COLOR,
         )
