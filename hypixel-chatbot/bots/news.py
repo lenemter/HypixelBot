@@ -3,7 +3,7 @@ from discord.ext import commands
 from discord.ext.commands.context import Context
 
 
-from common import COLOR
+from common import SUCCESS_COLOR, ERROR_COLOR
 from news_utils import get_news
 
 
@@ -14,11 +14,22 @@ class NewsBot(commands.Cog):
         self.bot = bot
 
     @commands.command(name="news")
-    async def news(self, ctx: Context):
-        news = get_news(30)
+    async def news(self, ctx: Context, count: int = 3):
+        if count <= 0:
+            embed = Embed(
+                title="❌ Ошибка!",
+                description="Не могу отправить так мало новостей",
+                color=ERROR_COLOR,
+            )
+            await ctx.send(embed=embed)
+            return
+
+        news = get_news(count)
         embed = Embed(
-            title=f"Last {len(news)} news",
-            description="\n".join((f"[{new.title}]({new.link})" for new in news)),
-            color=COLOR,
+            title="Последние посты" if len(news) >= 2 else "Последний пост",
+            color=SUCCESS_COLOR,
         )
         await ctx.send(embed=embed)
+
+        for link in news:
+            await ctx.send(link)

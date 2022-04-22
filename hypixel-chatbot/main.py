@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import logging
+import locale
 
 from database.db_session import global_init, create_session
 from database.__all_models import User
@@ -13,9 +14,14 @@ from bots.news import NewsBot
 from bots.hypixel_stats import HypixelStats
 from bots.music import MusicBot
 
+locale.setlocale(locale.LC_ALL, "ru_RU")
+
 
 class HypixelBot(commands.Bot):
     async def on_message(self, message: discord.Message):
+        if message.author == self.user:
+            return
+
         user_id = message.author.id
         user = session.query(User).filter(User.id == user_id)
         if not user:

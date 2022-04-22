@@ -1,5 +1,5 @@
-discord.py
-schedule
 bs4
-sqlalchemy
+discord.py
 requests
+schedule
+sqlalchemy
