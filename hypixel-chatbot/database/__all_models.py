@@ -1,1 +1,2 @@
-from models import News
+from .models.user import User
+from .models.music import Music

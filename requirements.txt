@@ -1,4 +1,6 @@
-discord.py
-schedule
 bs4
+discord.py
 hypixel.py
+requests
+schedule
+sqlalchemy

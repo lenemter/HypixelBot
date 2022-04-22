@@ -7,7 +7,7 @@ from common import COLOR
 from news_utils import get_news
 
 
-class News(commands.Cog):
+class NewsBot(commands.Cog):
     def __init__(self, bot, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

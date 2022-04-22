@@ -3,7 +3,8 @@ import sqlalchemy
 import sqlalchemy.orm
 import sqlalchemy.ext.declarative
 
-SqlAlchemyBase = sqlalchemy.ext.declarative.declarative_base()
+
+Base = sqlalchemy.ext.declarative.declarative_base()
 
 __factory = None
 
@@ -15,7 +16,7 @@ def global_init(db_file):
         return
 
     if not db_file or not db_file.strip():
-        logging.critical("Необходимо указать файл базы данных.")
+        logging.error("Необходимо указать файл базы данных.")
         raise Exception("Необходимо указать файл базы данных.")
 
     conn_str = f"sqlite:///{db_file.strip()}?check_same_thread=False"
@@ -26,7 +27,7 @@ def global_init(db_file):
 
     from . import __all_models
 
-    SqlAlchemyBase.metadata.create_all(engine)
+    Base.metadata.create_all(engine)
 
 
 def create_session() -> sqlalchemy.orm.Session:
