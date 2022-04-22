@@ -1,6 +1,5 @@
 import os
 import random
-import locale
 from pathlib import Path
 import datetime
 import calendar
@@ -12,7 +11,6 @@ from common import SUCCESS_COLOR
 from database.db_session import create_session
 from database.__all_models import Music
 
-locale.setlocale(locale.LC_ALL, "ru_RU")
 session = create_session()
 
 

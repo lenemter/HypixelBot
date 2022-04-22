@@ -5,7 +5,7 @@ import schedule
 import threading
 import time
 
-from common import COMMAND_PREFIX, COLOR, SUCCESS_COLOR, ERROR_COLOR
+from common import COMMAND_PREFIX, REGULAR_COLOR, SUCCESS_COLOR, ERROR_COLOR
 
 
 def run_continuously(interval=1):
@@ -58,7 +58,7 @@ class NewsReminder(commands.Cog):
                     f"{COMMAND_PREFIX}reminder remove dm|chat"
                     f"`"
                 ),
-                color=COLOR,
+                color=REGULAR_COLOR,
             )
             await ctx.send(embed=embed)
 
@@ -72,7 +72,7 @@ class NewsReminder(commands.Cog):
                     f"dm   — Отправлять новости в Личные сообщения\n"
                     f"chat — Отправлять новости в этот чат"
                 ),
-                color=COLOR,
+                color=REGULAR_COLOR,
             )
             await ctx.send(embed=embed)
             return None
@@ -111,7 +111,7 @@ class NewsReminder(commands.Cog):
                     f"dm   — Не отправлять новости в Личные сообщения\n"
                     f"chat — Не отправлять новости в этот чат"
                 ),
-                color=COLOR,
+                color=REGULAR_COLOR,
             )
             await ctx.send(embed=embed)
 

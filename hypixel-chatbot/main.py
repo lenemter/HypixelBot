@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import logging
+import locale
 
 from database.db_session import global_init, create_session
 from database.__all_models import User
@@ -12,6 +13,8 @@ global_init(DATABASE_PATH)
 from bots.news import NewsBot
 from bots.hypixel_stats import HypixelStats
 from bots.music import MusicBot
+
+locale.setlocale(locale.LC_ALL, "ru_RU")
 
 
 class HypixelBot(commands.Bot):
