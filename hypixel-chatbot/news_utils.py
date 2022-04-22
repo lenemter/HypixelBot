@@ -27,7 +27,7 @@ def get_news(count: int = 10):
         news_a = news_div_soup.findAll("a", {"href": LINK_REGEX})
 
         for a in news_a:
-            link = a["href"].strip("unread")
+            link = a["href"].rstrip("unread")
             link = f"{HYPIXEL_URL}{link}"
             if link in result_links:
                 continue
