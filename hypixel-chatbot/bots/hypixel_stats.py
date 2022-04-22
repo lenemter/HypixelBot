@@ -59,9 +59,11 @@ class HypixelStats(commands.Cog):
                 f"Уровень: {format_number(player.level)}\n"
                 f"Ачивки: {format_number(player.achievement_points)}\n"
                 f"Карма: {format_number(player.karma)}\n"
-                f"Друзья: {format_number(len(friends))}\n\n"
+                f"Друзья: {format_number(len(friends))}\n"
+                f"\n"
                 # f"Гильдия: {guild.name}\n\n"
-                f"Гаджет: {active_gadget}\n\n"
+                f"Гаджет: {active_gadget}\n"
+                f"\n"
                 f"Первый вход: {format_date(player.first_login)}\n"
                 f"Последний вход: {last_login}\n"
                 f"Последняя игра: {last_game}"
@@ -168,21 +170,28 @@ class HypixelStats(commands.Cog):
         embed = Embed(
             title=f"📊 Bed Wars статистика {player.name}",
             description=(
-                f"Уровень: {format_number(player.bedwars.level)}✫\n\n"
+                f"Уровень: {format_number(player.bedwars.level)}✫\n"
+                f"\n"
                 f"Киллы: {format_number(player.bedwars.kills)}\n"
                 f"Смерти: {format_number(player.bedwars.deaths)}\n"
-                f"K/D: {format_number(player.bedwars.kdr)}\n\n"
+                f"K/D: {format_number(player.bedwars.kdr)}\n"
+                f"\n"
                 f"Финальные киллы: {format_number(player.bedwars.final_kills)}\n"
                 f"Финальные смерти: {format_number(player.bedwars.final_deaths)}\n"
-                f"FK/D: {format_number(player.bedwars.fkdr)}\n\n"
+                f"FK/D: {format_number(player.bedwars.fkdr)}\n"
+                f"\n"
                 f"Победы: {format_number(player.bedwars.wins)}\n"
                 f"Проигрыши: {format_number(player.bedwars.losses)}\n"
-                f"W/L: {format_number(player.bedwars.wlr)}\n\n"
-                f"Игр сыграно: {format_number(player.bedwars.games_played)}\n\n"
-                f"Побед подряд: {format_number(player_bedwars_winstreak)}\n\n"
+                f"W/L: {format_number(player.bedwars.wlr)}\n"
+                f"\n"
+                f"Игр сыграно: {format_number(player.bedwars.games_played)}\n"
+                f"\n"
+                f"Побед подряд: {format_number(player_bedwars_winstreak)}\n"
+                f"\n"
                 f"Кроватей сломано: {format_number(player.bedwars.beds_broken)}\n"
                 f"Кроватей потеряно: {format_number(player.bedwars.beds_lost)}\n"
-                f"BB/L: {format_number(player.bedwars.bblr)}\n\n"
+                f"BB/L: {format_number(player.bedwars.bblr)}\n"
+                f"\n"
                 f"Монеты: {format_number(player.bedwars.coins)}"
             ),
             color=SUCCESS_COLOR,
@@ -221,17 +230,72 @@ class HypixelStats(commands.Cog):
             description=(
                 f"Киллы: {format_number(player.duels.kills)}\n"
                 f"Смерти: {format_number(player.duels.deaths)}\n"
-                f"K/D: {format_number(player_duels_kdr)}\n\n"
+                f"K/D: {format_number(player_duels_kdr)}\n"
+                f"\n"
                 f"Победы: {format_number(player.duels.wins)}\n"
                 f"Проигрыши: {format_number(player.duels.losses)}\n"
-                f"W/L: {format_number(player.duels.wlr)}\n\n"
+                f"W/L: {format_number(player.duels.wlr)}\n"
+                f"\n"
                 f"Удары оружием: {format_number(player.duels.melee_hits)}\n"
                 f"Попадания: {format_number(player.duels.melee_swings)}\n"
-                f"H/M: {format_number(player_duels_mhmr)}\n\n"
+                f"H/M: {format_number(player_duels_mhmr)}\n"
+                f"\n"
                 f"Выстрелы из лука: {format_number(player.duels.arrows_shot)}\n"
                 f"Попадания: {format_number(player.duels.arrows_hit)}\n"
-                f"H/M: {format_number(player_duels_bhmr)}\n\n"
+                f"H/M: {format_number(player_duels_bhmr)}\n"
+                f"\n"
                 f"Монеты: {format_number(player.duels.coins)}"
+            ),
+            color=SUCCESS_COLOR,
+        )
+        await ctx.send(embed=embed)
+
+    @commands.group(name="arcade")
+    async def get_arcade(self, ctx: Context, where: str = ""):
+        if not where:
+            where = ctx.message.author.name
+
+        where = where.lower()
+
+        client = hypixel.Client(API_KEY)
+        async with client:
+            try:
+                player = await client.player(where)
+            except HypixelException:
+                embed = Embed(
+                    title=f"❌ Ошибка!",
+                    description=(f"Такого игрока не существует"),
+                    color=ERROR_COLOR,
+                )
+                await ctx.send(embed=embed)
+
+        embed = Embed(
+            title=f"📊 Arcade статистика {player.name}",
+            description=(
+                f"Монеты: {format_number(player.arcade.coins)}\n"
+                f"\n"
+                f"Hypixel Says:\n"
+                f"Игр сыграно: {format_number(player.arcade.hypixel_says.rounds)}\n"
+                f"Победы: {format_number(player.arcade.hypixel_says.wins)}\n"
+                f"Проигрыши: {format_number(player.arcade.hypixel_says.losses)}\n"
+                f"W/L: {format_number(player.arcade.hypixel_says.wlr)}\n"
+                f"\n"
+                f"Победы Party Games: {format_number(player.arcade.party_games.total_wins)}\n"
+                f"\n"
+                f"Capture The Wool:\n"
+                f"Захват шерсти: {format_number(player.arcade.ctw.captures)}\n"
+                f"Киллы и ассисты {format_number(player.arcade.ctw.kills_assists)}\n"
+                f"\n"
+                f"Mini Walls:\n"
+                f"Победы: {format_number(player.arcade.mini_walls.wins)}\n"
+                f"Киллы: {format_number(player.arcade.mini_walls.kills)}\n"
+                f"Смерти: {format_number(player.arcade.mini_walls.deaths)}\n"
+                f"K/D: {format_number(player.arcade.mini_walls.kdr)}\n"
+                f"Финальные киллы: {format_number(player.arcade.mini_walls.final_kills)}\n"
+                f"Киллов Иссушителя (DO WE CHANGE THIS?): {format_number(player.arcade.mini_walls.wither_kills)}\n"
+                f"Урон Иссушителя (DO WE CHANGE THIS?): {format_number(player.arcade.mini_walls.wither_damage)}\n"
+                f"Выстрелы с попаданием: {format_number(player.arcade.mini_walls.arrows_hit)}\n"
+                f"Общие выстрелы: {format_number(player.arcade.mini_walls.arrows_shot)}"
             ),
             color=SUCCESS_COLOR,
         )
