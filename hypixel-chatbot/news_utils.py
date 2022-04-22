@@ -17,7 +17,6 @@ def get_news(count: int = 10):
         request = requests.get(
             HYPIXEL_URL, headers=HEADERS, params={"page": current_page}
         )
-        print(f"{current_page=}")
         page = request.text
         current_page += 1
 

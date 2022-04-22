@@ -19,6 +19,9 @@ locale.setlocale(locale.LC_ALL, "ru_RU")
 
 class HypixelBot(commands.Bot):
     async def on_message(self, message: discord.Message):
+        if message.author == self.user:
+            return
+
         user_id = message.author.id
         user = session.query(User).filter(User.id == user_id)
         if not user:
