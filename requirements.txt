@@ -1,3 +1,4 @@
 discord.py
 schedule
 bs4
+hypixel.py
