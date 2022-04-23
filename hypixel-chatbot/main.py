@@ -1,19 +1,20 @@
+import locale
+import logging
+
 import discord
 from discord.ext import commands
-import logging
-import locale
 
-from database.db_session import global_init, create_session
-from database.__all_models import User, ChatNotifier
-from common import TOKEN, COMMAND_PREFIX, DATABASE_PATH, ERROR_COLOR, SUCCESS_COLOR
+from common import COMMAND_PREFIX, DATABASE_PATH, ERROR_COLOR, SUCCESS_COLOR, TOKEN
+from database.__all_models import ChatNotifier, User
+from database.db_session import create_session, global_init
 
 # This is here for bots imports
 global_init(DATABASE_PATH)
 
-from bots.news import NewsBot
-from bots.hypixel_stats import HypixelStats
 from bots.music import MusicBot
+from bots.news import NewsBot
 from bots.settings import SettingsBot
+from bots.stats import HypixelStats
 
 locale.setlocale(locale.LC_ALL, "ru_RU")
 

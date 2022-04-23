@@ -1,11 +1,9 @@
+from common import COMMAND_PREFIX, REGULAR_COLOR, SUCCESS_COLOR
+from database.__all_models import ChatNotifier
+from database.db_session import create_session
 from discord import Embed
 from discord.ext import commands
 from discord.ext.commands.context import Context
-
-
-from common import REGULAR_COLOR, SUCCESS_COLOR, COMMAND_PREFIX
-from database.db_session import create_session
-from database.__all_models import ChatNotifier
 
 session = create_session()
 
