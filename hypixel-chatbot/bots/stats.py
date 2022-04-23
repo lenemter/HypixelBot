@@ -4,7 +4,7 @@ from discord import Embed
 from discord.ext import commands
 from discord.ext.commands.context import Context
 from hypixel import HypixelException
-from stats_utils import format_date, format_number, round_number, create_head
+from stats_utils import create_head, format_date, format_number, round_number
 
 
 class HypixelStats(commands.Cog):

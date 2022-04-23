@@ -1,11 +1,11 @@
-from discord import Embed
-from discord.ext import commands
-from discord.ext.commands.context import Context
-import schedule
 import threading
 import time
 
-from common import COMMAND_PREFIX, REGULAR_COLOR, SUCCESS_COLOR, ERROR_COLOR
+import schedule
+from common import COMMAND_PREFIX, ERROR_COLOR, REGULAR_COLOR, SUCCESS_COLOR
+from discord import Embed
+from discord.ext import commands
+from discord.ext.commands.context import Context
 
 
 def run_continuously(interval=1):

@@ -1,7 +1,7 @@
-from database.db_session import global_init, create_session
-from database.__all_models import *
-
 from pprint import pprint
+
+from database.__all_models import *
+from database.db_session import create_session, global_init
 
 global_init("database/database.db")
 session = create_session()

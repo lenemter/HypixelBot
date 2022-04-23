@@ -1,7 +1,3 @@
-import requests
-from PIL import Image
-
-
 def format_number(number):
     return "{:,}".format(number).replace(",", " ")
 

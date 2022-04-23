@@ -1,9 +1,7 @@
+from common import ERROR_COLOR, SUCCESS_COLOR
 from discord import Embed
 from discord.ext import commands
 from discord.ext.commands.context import Context
-
-
-from common import SUCCESS_COLOR, ERROR_COLOR
 from news_utils import get_news
 
 
