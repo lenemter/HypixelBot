@@ -11,7 +11,7 @@ from common import TOKEN, COMMAND_PREFIX, DATABASE_PATH
 global_init(DATABASE_PATH)
 
 from bots.news import NewsBot
-from bots.hypixel_stats import HypixelStats
+from bots.stats import HypixelStats
 from bots.music import MusicBot
 
 locale.setlocale(locale.LC_ALL, "ru_RU")
