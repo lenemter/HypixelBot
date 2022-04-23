@@ -4,7 +4,7 @@ from discord import Embed
 from discord.ext import commands
 from discord.ext.commands.context import Context
 from hypixel import HypixelException
-from stats_utils import format_date, format_number, round_number
+from stats_utils import format_date, format_number, round_number, create_head
 
 
 class HypixelStats(commands.Cog):
@@ -34,6 +34,8 @@ class HypixelStats(commands.Cog):
                 )
                 await ctx.send(embed=embed)
 
+        player_uuid = player.uuid
+
         last_login = player.last_login
         if last_login:
             last_login = format_date(player.last_login)
@@ -46,12 +48,6 @@ class HypixelStats(commands.Cog):
         else:
             last_game = player.most_recent_game.clean_name
 
-        active_gadget = player.current_gadget
-        if not active_gadget:
-            active_gadget = "—"
-        else:
-            active_gadget = player.current_gadget.capitalize()
-
         embed = Embed(
             title=f"📊 Статистика {player.name}",
             description=(
@@ -62,14 +58,14 @@ class HypixelStats(commands.Cog):
                 f"Друзья: {format_number(len(friends))}\n"
                 f"\n"
                 # f"Гильдия: {guild.name}\n\n"
-                f"Гаджет: {active_gadget}\n"
-                f"\n"
                 f"Первый вход: {format_date(player.first_login)}\n"
                 f"Последний вход: {last_login}\n"
                 f"Последняя игра: {last_game}"
             ),
             color=SUCCESS_COLOR,
         )
+        embed.set_thumbnail(url=create_head(player_uuid))
+
         await ctx.send(embed=embed)
 
     @commands.group(name="names")
@@ -91,6 +87,8 @@ class HypixelStats(commands.Cog):
                 )
                 await ctx.send(embed=embed)
 
+        player_uuid = player.uuid
+
         names = [name for name in player.known_aliases]
         names.reverse()
 
@@ -101,6 +99,8 @@ class HypixelStats(commands.Cog):
             ),
             color=SUCCESS_COLOR,
         )
+        embed.set_thumbnail(url=create_head(player_uuid))
+
         await ctx.send(embed=embed)
 
     @commands.group(name="socials")
@@ -122,6 +122,8 @@ class HypixelStats(commands.Cog):
                 )
                 await ctx.send(embed=embed)
 
+        player_uuid = player.uuid
+
         socials = dict()
         socials["Discord"] = player.socials.discord
         socials["YouTube"] = player.socials.youtube
@@ -141,6 +143,8 @@ class HypixelStats(commands.Cog):
             description=(message_content),
             color=SUCCESS_COLOR,
         )
+        embed.set_thumbnail(url=create_head(player_uuid))
+
         await ctx.send(embed=embed)
 
     @commands.group(name="bw")
@@ -161,6 +165,8 @@ class HypixelStats(commands.Cog):
                     color=ERROR_COLOR,
                 )
                 await ctx.send(embed=embed)
+
+        player_uuid = player.uuid
 
         if not player.bedwars.winstreak:
             player_bedwars_winstreak = 0
@@ -196,6 +202,8 @@ class HypixelStats(commands.Cog):
             ),
             color=SUCCESS_COLOR,
         )
+        embed.set_thumbnail(url=create_head(player_uuid))
+
         await ctx.send(embed=embed)
 
     @commands.group(name="duels")
@@ -217,10 +225,14 @@ class HypixelStats(commands.Cog):
                 )
                 await ctx.send(embed=embed)
 
+        player_uuid = player.uuid
+
         player_duels_kdr = round_number(player.duels.kills / player.duels.deaths)
+
         player_duels_mhmr = round_number(
             player.duels.melee_hits / player.duels.melee_swings
         )
+
         player_duels_bhmr = round_number(
             player.duels.arrows_hit / player.duels.arrows_shot
         )
@@ -248,6 +260,8 @@ class HypixelStats(commands.Cog):
             ),
             color=SUCCESS_COLOR,
         )
+        embed.set_thumbnail(url=create_head(player_uuid))
+
         await ctx.send(embed=embed)
 
     @commands.group(name="arcade")
@@ -268,6 +282,8 @@ class HypixelStats(commands.Cog):
                     color=ERROR_COLOR,
                 )
                 await ctx.send(embed=embed)
+
+        player_uuid = player.uuid
 
         embed = Embed(
             title=f"📊 Arcade статистика {player.name}",
@@ -299,10 +315,12 @@ class HypixelStats(commands.Cog):
             ),
             color=SUCCESS_COLOR,
         )
+        embed.set_thumbnail(url=create_head(player_uuid))
+
         await ctx.send(embed=embed)
 
     @commands.group(name="tkr")
-    async def get_bw(self, ctx: Context, where: str = ""):
+    async def get_tkr(self, ctx: Context, where: str = ""):
         if not where:
             where = ctx.message.author.name
 
@@ -319,6 +337,8 @@ class HypixelStats(commands.Cog):
                     color=ERROR_COLOR,
                 )
                 await ctx.send(embed=embed)
+
+        player_uuid = player.uuid
 
         embed = Embed(
             title=f"📊 Turbo Kart Racers статистика {player.name}",
@@ -342,4 +362,48 @@ class HypixelStats(commands.Cog):
             ),
             color=SUCCESS_COLOR,
         )
+        embed.set_thumbnail(url=create_head(player_uuid))
+
+        await ctx.send(embed=embed)
+
+    @commands.group(name="paintball")
+    async def get_paintball(self, ctx: Context, where: str = ""):
+        if not where:
+            where = ctx.message.author.name
+
+        where = where.lower()
+
+        client = hypixel.Client(API_KEY)
+        async with client:
+            try:
+                player = await client.player(where)
+            except HypixelException:
+                embed = Embed(
+                    title=f"❌ Ошибка!",
+                    description=(f"Такого игрока не существует"),
+                    color=ERROR_COLOR,
+                )
+                await ctx.send(embed=embed)
+
+        player_uuid = player.uuid
+
+        embed = Embed(
+            title=f"📊 Paintball статистика {player.name}",
+            description=(
+                f"Победы: {format_number(player.paintball.wins)}\n"
+                f"\n"
+                f"Киллы: {format_number(player.paintball.kills)}\n"
+                f"Серии киллов: {format_number(player.paintball.killstreaks)}\n"
+                f"Смерти: {format_number(player.paintball.deaths)}\n"
+                f"K/D: {format_number(player.paintball.kdr)}\n"
+                f"\n"
+                f"Выстрелы: {format_number(player.paintball.shots_fired)}\n"
+                f"S/K: {format_number(player.paintball.skr)}\n"
+                f"\n"
+                f"Монеты: {format_number(player.paintball.coins)}"
+            ),
+            color=SUCCESS_COLOR,
+        )
+        embed.set_thumbnail(url=create_head(player_uuid))
+
         await ctx.send(embed=embed)
