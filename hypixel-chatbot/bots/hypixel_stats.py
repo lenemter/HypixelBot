@@ -1,5 +1,5 @@
 import hypixel
-from common import API_KEY, COLOR, COMMAND_PREFIX, ERROR_COLOR, SUCCESS_COLOR
+from common import API_KEY, ERROR_COLOR, SUCCESS_COLOR
 from discord import Embed
 from discord.ext import commands
 from discord.ext.commands.context import Context
@@ -181,15 +181,15 @@ class HypixelStats(commands.Cog):
                 f"FK/D: {format_number(player.bedwars.fkdr)}\n"
                 f"\n"
                 f"Победы: {format_number(player.bedwars.wins)}\n"
-                f"Проигрыши: {format_number(player.bedwars.losses)}\n"
+                f"Поражения: {format_number(player.bedwars.losses)}\n"
                 f"W/L: {format_number(player.bedwars.wlr)}\n"
                 f"\n"
-                f"Игр сыграно: {format_number(player.bedwars.games_played)}\n"
+                f"Сыгранные игры: {format_number(player.bedwars.games_played)}\n"
                 f"\n"
-                f"Побед подряд: {format_number(player_bedwars_winstreak)}\n"
+                f"Победы подряд: {format_number(player_bedwars_winstreak)}\n"
                 f"\n"
-                f"Кроватей сломано: {format_number(player.bedwars.beds_broken)}\n"
-                f"Кроватей потеряно: {format_number(player.bedwars.beds_lost)}\n"
+                f"Сломанные кровати: {format_number(player.bedwars.beds_broken)}\n"
+                f"Потерянные кровати: {format_number(player.bedwars.beds_lost)}\n"
                 f"BB/L: {format_number(player.bedwars.bblr)}\n"
                 f"\n"
                 f"Монеты: {format_number(player.bedwars.coins)}"
@@ -233,15 +233,15 @@ class HypixelStats(commands.Cog):
                 f"K/D: {format_number(player_duels_kdr)}\n"
                 f"\n"
                 f"Победы: {format_number(player.duels.wins)}\n"
-                f"Проигрыши: {format_number(player.duels.losses)}\n"
+                f"Поражения: {format_number(player.duels.losses)}\n"
                 f"W/L: {format_number(player.duels.wlr)}\n"
                 f"\n"
-                f"Удары оружием: {format_number(player.duels.melee_hits)}\n"
-                f"Попадания: {format_number(player.duels.melee_swings)}\n"
+                f"Удары в ближнем бою: {format_number(player.duels.melee_hits)}\n"
+                f"Попадания в ближнем бою: {format_number(player.duels.melee_swings)}\n"
                 f"H/M: {format_number(player_duels_mhmr)}\n"
                 f"\n"
                 f"Выстрелы из лука: {format_number(player.duels.arrows_shot)}\n"
-                f"Попадания: {format_number(player.duels.arrows_hit)}\n"
+                f"Попадания с лука: {format_number(player.duels.arrows_hit)}\n"
                 f"H/M: {format_number(player_duels_bhmr)}\n"
                 f"\n"
                 f"Монеты: {format_number(player.duels.coins)}"
@@ -283,8 +283,8 @@ class HypixelStats(commands.Cog):
                 f"Победы Party Games: {format_number(player.arcade.party_games.total_wins)}\n"
                 f"\n"
                 f"Capture The Wool:\n"
-                f"Захват шерсти: {format_number(player.arcade.ctw.captures)}\n"
-                f"Киллы и ассисты {format_number(player.arcade.ctw.kills_assists)}\n"
+                f"Захваты шерсти: {format_number(player.arcade.ctw.captures)}\n"
+                f"Киллы и ассисты: {format_number(player.arcade.ctw.kills_assists)}\n"
                 f"\n"
                 f"Mini Walls:\n"
                 f"Победы: {format_number(player.arcade.mini_walls.wins)}\n"
@@ -292,10 +292,53 @@ class HypixelStats(commands.Cog):
                 f"Смерти: {format_number(player.arcade.mini_walls.deaths)}\n"
                 f"K/D: {format_number(player.arcade.mini_walls.kdr)}\n"
                 f"Финальные киллы: {format_number(player.arcade.mini_walls.final_kills)}\n"
-                f"Киллов Иссушителя (DO WE CHANGE THIS?): {format_number(player.arcade.mini_walls.wither_kills)}\n"
-                f"Урон Иссушителя (DO WE CHANGE THIS?): {format_number(player.arcade.mini_walls.wither_damage)}\n"
-                f"Выстрелы с попаданием: {format_number(player.arcade.mini_walls.arrows_hit)}\n"
+                f"Киллы Иссушителя: {format_number(player.arcade.mini_walls.wither_kills)}\n"
+                f"Урон Иссушителя: {format_number(player.arcade.mini_walls.wither_damage)}\n"
+                f"Попадания стрелой: {format_number(player.arcade.mini_walls.arrows_hit)}\n"
                 f"Общие выстрелы: {format_number(player.arcade.mini_walls.arrows_shot)}"
+            ),
+            color=SUCCESS_COLOR,
+        )
+        await ctx.send(embed=embed)
+
+    @commands.group(name="tkr")
+    async def get_bw(self, ctx: Context, where: str = ""):
+        if not where:
+            where = ctx.message.author.name
+
+        where = where.lower()
+
+        client = hypixel.Client(API_KEY)
+        async with client:
+            try:
+                player = await client.player(where)
+            except HypixelException:
+                embed = Embed(
+                    title=f"❌ Ошибка!",
+                    description=(f"Такого игрока не существует"),
+                    color=ERROR_COLOR,
+                )
+                await ctx.send(embed=embed)
+
+        embed = Embed(
+            title=f"📊 Turbo Kart Racers статистика {player.name}",
+            description=(
+                f"Победы: {format_number(player.tkr.wins)}\n"
+                f"\n"
+                f"Пройденные круги: {format_number(player.tkr.laps)}\n"
+                f"\n"
+                f"Трофеи:\n"
+                f"Золотые трофеи: {format_number(player.tkr.gold)}\n"
+                f"Серебрянные трофеи: {format_number(player.tkr.silver)}\n"
+                f"Бронзовые трофеи: {format_number(player.tkr.bronze)}\n"
+                f"\n"
+                f"Удары банановой кожурой: {format_number(player.tkr.banana_hits)}\n"
+                f"Наезды на банановую кожуру: {format_number(player.tkr.bananas_received)}\n"
+                f"H/R: {format_number(player.tkr.br)}"
+                f"\n"
+                f"Удары синей торпедой: {format_number(player.tkr.blue_torpedo_hits)}\n"
+                f"\n"
+                f"Монеты: {format_number(player.tkr.coins)}"
             ),
             color=SUCCESS_COLOR,
         )
