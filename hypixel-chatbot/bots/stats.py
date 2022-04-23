@@ -13,18 +13,18 @@ class HypixelStats(commands.Cog):
 
         self.bot = bot
 
-    @commands.group(name="stats")
-    async def get_stats(self, ctx: Context, where: str = ""):
-        if not where:
-            where = ctx.message.author.name
+    @commands.command(name="stats")
+    async def get_stats(self, ctx: Context, nickname: str = ""):
+        if not nickname:
+            nickname = ctx.message.author.name
 
-        where = where.lower()
+        nickname = nickname.lower()
 
         client = hypixel.Client(API_KEY)
         async with client:
             try:
-                player = await client.player(where)
-                friends = await client.player_friends(where)
+                player = await client.player(nickname)
+                friends = await client.player_friends(nickname)
             except HypixelException:
                 embed = Embed(
                     title=f"❌ Ошибка!",
@@ -68,17 +68,17 @@ class HypixelStats(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.group(name="names")
-    async def get_names(self, ctx: Context, where: str = ""):
-        if not where:
-            where = ctx.message.author.name
+    @commands.command(name="names")
+    async def get_names(self, ctx: Context, nickname: str = ""):
+        if not nickname:
+            nickname = ctx.message.author.name
 
-        where = where.lower()
+        nickname = nickname.lower()
 
         client = hypixel.Client(API_KEY)
         async with client:
             try:
-                player = await client.player(where)
+                player = await client.player(nickname)
             except HypixelException:
                 embed = Embed(
                     title=f"❌ Ошибка!",
@@ -103,17 +103,17 @@ class HypixelStats(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.group(name="socials")
-    async def get_socials(self, ctx: Context, where: str = ""):
-        if not where:
-            where = ctx.message.author.name
+    @commands.command(name="socials")
+    async def get_socials(self, ctx: Context, nickname: str = ""):
+        if not nickname:
+            nickname = ctx.message.author.name
 
-        where = where.lower()
+        nickname = nickname.lower()
 
         client = hypixel.Client(API_KEY)
         async with client:
             try:
-                player = await client.player(where)
+                player = await client.player(nickname)
             except HypixelException:
                 embed = Embed(
                     title=f"❌ Ошибка!",
@@ -147,17 +147,17 @@ class HypixelStats(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.group(name="bw")
-    async def get_bw(self, ctx: Context, where: str = ""):
-        if not where:
-            where = ctx.message.author.name
+    @commands.command(name="bw")
+    async def get_bw(self, ctx: Context, nickname: str = ""):
+        if not nickname:
+            nickname = ctx.message.author.name
 
-        where = where.lower()
+        nickname = nickname.lower()
 
         client = hypixel.Client(API_KEY)
         async with client:
             try:
-                player = await client.player(where)
+                player = await client.player(nickname)
             except HypixelException:
                 embed = Embed(
                     title=f"❌ Ошибка!",
@@ -206,17 +206,17 @@ class HypixelStats(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.group(name="duels")
-    async def get_duels(self, ctx: Context, where: str = ""):
-        if not where:
-            where = ctx.message.author.name
+    @commands.command(name="duels")
+    async def get_duels(self, ctx: Context, nickname: str = ""):
+        if not nickname:
+            nickname = ctx.message.author.name
 
-        where = where.lower()
+        nickname = nickname.lower()
 
         client = hypixel.Client(API_KEY)
         async with client:
             try:
-                player = await client.player(where)
+                player = await client.player(nickname)
             except HypixelException:
                 embed = Embed(
                     title=f"❌ Ошибка!",
@@ -264,17 +264,17 @@ class HypixelStats(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.group(name="arcade")
-    async def get_arcade(self, ctx: Context, where: str = ""):
-        if not where:
-            where = ctx.message.author.name
+    @commands.command(name="arcade")
+    async def get_arcade(self, ctx: Context, nickname: str = ""):
+        if not nickname:
+            nickname = ctx.message.author.name
 
-        where = where.lower()
+        nickname = nickname.lower()
 
         client = hypixel.Client(API_KEY)
         async with client:
             try:
-                player = await client.player(where)
+                player = await client.player(nickname)
             except HypixelException:
                 embed = Embed(
                     title=f"❌ Ошибка!",
@@ -319,17 +319,17 @@ class HypixelStats(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.group(name="tkr")
-    async def get_tkr(self, ctx: Context, where: str = ""):
-        if not where:
-            where = ctx.message.author.name
+    @commands.command(name="tkr")
+    async def get_tkr(self, ctx: Context, nickname: str = ""):
+        if not nickname:
+            nickname = ctx.message.author.name
 
-        where = where.lower()
+        nickname = nickname.lower()
 
         client = hypixel.Client(API_KEY)
         async with client:
             try:
-                player = await client.player(where)
+                player = await client.player(nickname)
             except HypixelException:
                 embed = Embed(
                     title=f"❌ Ошибка!",
@@ -366,17 +366,17 @@ class HypixelStats(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.group(name="paintball")
-    async def get_paintball(self, ctx: Context, where: str = ""):
-        if not where:
-            where = ctx.message.author.name
+    @commands.command(name="paintball")
+    async def get_paintball(self, ctx: Context, nickname: str = ""):
+        if not nickname:
+            nickname = ctx.message.author.name
 
-        where = where.lower()
+        nickname = nickname.lower()
 
         client = hypixel.Client(API_KEY)
         async with client:
             try:
-                player = await client.player(where)
+                player = await client.player(nickname)
             except HypixelException:
                 embed = Embed(
                     title=f"❌ Ошибка!",
