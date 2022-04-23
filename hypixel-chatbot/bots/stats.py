@@ -25,7 +25,6 @@ class HypixelStats(commands.Cog):
             try:
                 player = await client.player(where)
                 friends = await client.player_friends(where)
-                # guild = client.guild_by_player(where)
             except HypixelException:
                 embed = Embed(
                     title=f"❌ Ошибка!",
@@ -52,12 +51,13 @@ class HypixelStats(commands.Cog):
             title=f"📊 Статистика {player.name}",
             description=(
                 f"Ранг: {player.rank}\n"
+                f"\n"
                 f"Уровень: {format_number(player.level)}\n"
                 f"Ачивки: {format_number(player.achievement_points)}\n"
                 f"Карма: {format_number(player.karma)}\n"
+                f"\n"
                 f"Друзья: {format_number(len(friends))}\n"
                 f"\n"
-                # f"Гильдия: {guild.name}\n\n"
                 f"Первый вход: {format_date(player.first_login)}\n"
                 f"Последний вход: {last_login}\n"
                 f"Последняя игра: {last_game}"
@@ -352,8 +352,8 @@ class HypixelStats(commands.Cog):
                 f"Серебрянные трофеи: {format_number(player.tkr.silver)}\n"
                 f"Бронзовые трофеи: {format_number(player.tkr.bronze)}\n"
                 f"\n"
-                f"Удары банановой кожурой: {format_number(player.tkr.banana_hits)}\n"
-                f"Наезды на банановую кожуру: {format_number(player.tkr.bananas_received)}\n"
+                f"Удары банановой шкуркой: {format_number(player.tkr.banana_hits)}\n"
+                f"Наезды на банановую шкурку: {format_number(player.tkr.bananas_received)}\n"
                 f"H/R: {format_number(player.tkr.br)}"
                 f"\n"
                 f"Удары синей торпедой: {format_number(player.tkr.blue_torpedo_hits)}\n"
