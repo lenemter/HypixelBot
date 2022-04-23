@@ -8,4 +8,4 @@ class User(Base):
 
     id = Column(Integer, primary_key=True)
     music = relationship("Music", back_populates="user")
-    # нет chat_notifier, потому что нигде не нужно получать изменения настроек по пользователю
+    chat_notifiers = relationship("ChatNotifier", back_populates="user")

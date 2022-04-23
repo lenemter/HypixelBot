@@ -8,6 +8,6 @@ class ChatNotifier(Base):
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"))
-    user = relationship("User")
+    user = relationship("User", back_populates="chat_notifiers")
 
     chat_id = Column(Integer, nullable=False)
