@@ -67,7 +67,10 @@ def start_bot():
     intents = discord.Intents.default()
     intents.members = True
 
-    bot = HypixelBot(command_prefix=COMMAND_PREFIX, intents=intents)
+    activity = discord.Activity(
+        name=f"{COMMAND_PREFIX}help", type=discord.ActivityType.playing
+    )
+    bot = HypixelBot(command_prefix=COMMAND_PREFIX, intents=intents, activity=activity)
 
     bot.add_cog(NewsBot(bot))
     bot.add_cog(HypixelStats(bot))
