@@ -4,8 +4,8 @@ import logging
 import locale
 
 from database.db_session import global_init, create_session
-from database.__all_models import User
-from common import TOKEN, COMMAND_PREFIX, DATABASE_PATH
+from database.__all_models import User, ChatNotifier
+from common import TOKEN, COMMAND_PREFIX, DATABASE_PATH, ERROR_COLOR, SUCCESS_COLOR
 
 # This is here for bots imports
 global_init(DATABASE_PATH)
@@ -13,6 +13,7 @@ global_init(DATABASE_PATH)
 from bots.news import NewsBot
 from bots.hypixel_stats import HypixelStats
 from bots.music import MusicBot
+from bots.settings import SettingsBot
 
 locale.setlocale(locale.LC_ALL, "ru_RU")
 
@@ -30,6 +31,26 @@ class HypixelBot(commands.Bot):
             session.commit()
 
         return await super().on_message(message)
+
+    async def on_ready(self):
+        chat_notifiers = session.query(ChatNotifier)
+        for chat_notifier in chat_notifiers:
+            chat_id = chat_notifier.chat_id
+            channel = self.get_channel(chat_id)
+
+            embed = discord.Embed(title="Бот теперь онлайн", color=SUCCESS_COLOR)
+            await channel.send(embed=embed)
+
+    async def close(self):
+        chat_notifiers = session.query(ChatNotifier)
+        for chat_notifier in chat_notifiers:
+            chat_id = chat_notifier.chat_id
+            channel = self.get_channel(chat_id)
+
+            embed = discord.Embed(title="Бот теперь оффлайн", color=ERROR_COLOR)
+            await channel.send(embed=embed)
+
+        return await super().close()
 
 
 def setup_logging():
@@ -51,6 +72,7 @@ def start_bot():
     bot.add_cog(NewsBot(bot))
     bot.add_cog(HypixelStats(bot))
     bot.add_cog(MusicBot(bot))
+    bot.add_cog(SettingsBot(bot))
 
     bot.run(TOKEN)
 
