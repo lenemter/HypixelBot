@@ -25,6 +25,7 @@ class HypixelStats(commands.Cog):
             try:
                 player = await client.player(nickname)
                 friends = await client.player_friends(nickname)
+                player_status = await client.player_status(nickname)
             except HypixelException:
                 embed = Embed(
                     title=f"❌ Ошибка!",
@@ -48,6 +49,12 @@ class HypixelStats(commands.Cog):
         else:
             last_game = player.most_recent_game.clean_name
 
+        status = player_status.online
+        if status:
+            status = f"На сервере — {player_status.game_type.clean_name}"
+        else:
+            status = "Оффлайн"
+
         embed = Embed(
             title=f"📊 Статистика {player.name}",
             description=(
@@ -61,7 +68,9 @@ class HypixelStats(commands.Cog):
                 f"\n"
                 f"Первый вход: {format_date(player.first_login)}\n"
                 f"Последний вход: {last_login}\n"
-                f"Последняя игра: {last_game}"
+                f"Последняя игра: {last_game}\n"
+                f"\n"
+                f"Статус: {status}"
             ),
             color=SUCCESS_COLOR,
         )
