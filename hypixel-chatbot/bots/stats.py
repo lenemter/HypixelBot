@@ -31,6 +31,7 @@ class HypixelStats(commands.Cog):
                     description=(f"Такого игрока не существует"),
                     color=ERROR_COLOR,
                 )
+                embed.set_footer(text="Использование — !stats <никнейм>")
                 await ctx.send(embed=embed)
 
         player_uuid = player.uuid
@@ -65,6 +66,7 @@ class HypixelStats(commands.Cog):
             color=SUCCESS_COLOR,
         )
         embed.set_thumbnail(url=create_head(player_uuid))
+        embed.set_footer(text="Помощь — !help")
 
         await ctx.send(embed=embed)
 
@@ -85,6 +87,7 @@ class HypixelStats(commands.Cog):
                     description=(f"Такого игрока не существует"),
                     color=ERROR_COLOR,
                 )
+                embed.set_footer(text="Использование — !names <никнейм>")
                 await ctx.send(embed=embed)
 
         player_uuid = player.uuid
@@ -93,13 +96,14 @@ class HypixelStats(commands.Cog):
         names.reverse()
 
         embed = Embed(
-            title=f"📊 История никнеймов {player.name}",
+            title=f"📝 История никнеймов {player.name}",
             description=(
                 "\n".join((f"{names.index(name) + 1}. {name}" for name in names))
             ),
             color=SUCCESS_COLOR,
         )
         embed.set_thumbnail(url=create_head(player_uuid))
+        embed.set_footer(text="Помощь — !help")
 
         await ctx.send(embed=embed)
 
@@ -120,6 +124,7 @@ class HypixelStats(commands.Cog):
                     description=(f"Такого игрока не существует"),
                     color=ERROR_COLOR,
                 )
+                embed.set_footer(text="Использование — !socials <никнейм>")
                 await ctx.send(embed=embed)
 
         player_uuid = player.uuid
@@ -139,11 +144,12 @@ class HypixelStats(commands.Cog):
             message_content = "Социальные сети не указаны"
 
         embed = Embed(
-            title=f"📊 Социальные сети {player.name}",
+            title=f"📱 Социальные сети {player.name}",
             description=(message_content),
             color=SUCCESS_COLOR,
         )
         embed.set_thumbnail(url=create_head(player_uuid))
+        embed.set_footer(text="Помощь — !help")
 
         await ctx.send(embed=embed)
 
@@ -164,6 +170,7 @@ class HypixelStats(commands.Cog):
                     description=(f"Такого игрока не существует"),
                     color=ERROR_COLOR,
                 )
+                embed.set_footer(text="Использование — !bw <никнейм>")
                 await ctx.send(embed=embed)
 
         player_uuid = player.uuid
@@ -174,7 +181,7 @@ class HypixelStats(commands.Cog):
             player_bedwars_winstreak = player.bedwars.winstreak
 
         embed = Embed(
-            title=f"📊 Bed Wars статистика {player.name}",
+            title=f"🛏 Bed Wars статистика {player.name}",
             description=(
                 f"Уровень: {format_number(player.bedwars.level)}✫\n"
                 f"\n"
@@ -203,6 +210,7 @@ class HypixelStats(commands.Cog):
             color=SUCCESS_COLOR,
         )
         embed.set_thumbnail(url=create_head(player_uuid))
+        embed.set_footer(text="Помощь — !help")
 
         await ctx.send(embed=embed)
 
@@ -223,6 +231,7 @@ class HypixelStats(commands.Cog):
                     description=(f"Такого игрока не существует"),
                     color=ERROR_COLOR,
                 )
+                embed.set_footer(text="Использование — !duels <никнейм>")
                 await ctx.send(embed=embed)
 
         player_uuid = player.uuid
@@ -238,7 +247,7 @@ class HypixelStats(commands.Cog):
         )
 
         embed = Embed(
-            title=f"📊 Duels статистика {player.name}",
+            title=f"⚔️ Duels статистика {player.name}",
             description=(
                 f"Киллы: {format_number(player.duels.kills)}\n"
                 f"Смерти: {format_number(player.duels.deaths)}\n"
@@ -261,6 +270,7 @@ class HypixelStats(commands.Cog):
             color=SUCCESS_COLOR,
         )
         embed.set_thumbnail(url=create_head(player_uuid))
+        embed.set_footer(text="Помощь — !help")
 
         await ctx.send(embed=embed)
 
@@ -281,12 +291,13 @@ class HypixelStats(commands.Cog):
                     description=(f"Такого игрока не существует"),
                     color=ERROR_COLOR,
                 )
+                embed.set_footer(text="Использование — !arcade <никнейм>")
                 await ctx.send(embed=embed)
 
         player_uuid = player.uuid
 
         embed = Embed(
-            title=f"📊 Arcade статистика {player.name}",
+            title=f"🎮 Arcade статистика {player.name}",
             description=(
                 f"Монеты: {format_number(player.arcade.coins)}\n"
                 f"\n"
@@ -316,6 +327,7 @@ class HypixelStats(commands.Cog):
             color=SUCCESS_COLOR,
         )
         embed.set_thumbnail(url=create_head(player_uuid))
+        embed.set_footer(text="Помощь — !help")
 
         await ctx.send(embed=embed)
 
@@ -336,12 +348,13 @@ class HypixelStats(commands.Cog):
                     description=(f"Такого игрока не существует"),
                     color=ERROR_COLOR,
                 )
+                embed.set_footer(text="Использование — !tkr <никнейм>")
                 await ctx.send(embed=embed)
 
         player_uuid = player.uuid
 
         embed = Embed(
-            title=f"📊 Turbo Kart Racers статистика {player.name}",
+            title=f"🏎️ Turbo Kart Racers статистика {player.name}",
             description=(
                 f"Победы: {format_number(player.tkr.wins)}\n"
                 f"\n"
@@ -363,6 +376,7 @@ class HypixelStats(commands.Cog):
             color=SUCCESS_COLOR,
         )
         embed.set_thumbnail(url=create_head(player_uuid))
+        embed.set_footer(text="Помощь — !help")
 
         await ctx.send(embed=embed)
 
@@ -383,12 +397,13 @@ class HypixelStats(commands.Cog):
                     description=(f"Такого игрока не существует"),
                     color=ERROR_COLOR,
                 )
+                embed.set_footer(text="Использование — !paintball <никнейм>")
                 await ctx.send(embed=embed)
 
         player_uuid = player.uuid
 
         embed = Embed(
-            title=f"📊 Paintball статистика {player.name}",
+            title=f"⚽ Paintball статистика {player.name}",
             description=(
                 f"Победы: {format_number(player.paintball.wins)}\n"
                 f"\n"
@@ -405,5 +420,6 @@ class HypixelStats(commands.Cog):
             color=SUCCESS_COLOR,
         )
         embed.set_thumbnail(url=create_head(player_uuid))
+        embed.set_footer(text="Помощь — !help")
 
         await ctx.send(embed=embed)
