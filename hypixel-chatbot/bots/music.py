@@ -1,11 +1,16 @@
 import calendar
-import datetime
 import os
 import random
 from pathlib import Path
 
-from common import REGULAR_COLOR, SUCCESS_COLOR, COMMAND_PREFIX, WAIT_MESSAGE
-from database.__all_models import Music
+from common import (
+    COMMAND_PREFIX,
+    REGULAR_COLOR,
+    SUCCESS_COLOR,
+    WAIT_MESSAGE,
+    get_current_month_and_year,
+)
+from database.__all_models import MusicRequest, MusicStats
 from database.db_session import create_session
 from discord import Embed, File
 from discord.ext import commands
@@ -26,68 +31,65 @@ MUSIC_STATS_TITLES = [
 ]
 
 
-def get_song(user_id: int, title: str, month, year) -> Music:
-    """Gets song by params, if result is None, new music object will be created automatically"""
-    song = (
-        session.query(Music)
+def get_music_stats(user_id: int, title: str, month, year) -> MusicStats:
+    """Gets music_stats by params, if result is None, new music object will be created automatically"""
+    music_stats = (
+        session.query(MusicStats)
         .filter(
-            (Music.user_id == user_id)
-            & (Music.title == title)
-            & (Music.month == month)
-            & (Music.year == year)
+            (MusicStats.user_id == user_id)
+            & (MusicStats.title == title)
+            & (MusicStats.month == month)
+            & (MusicStats.year == year)
         )
         .first()
     )
 
-    if song is None:
-        song = Music(user_id=user_id, title=title, month=month, year=year)
-        session.add(song)
+    if music_stats is None:
+        music_stats = MusicStats(user_id=user_id, title=title, month=month, year=year)
+        session.add(music_stats)
         session.commit()
 
-    return song
+    return music_stats
 
 
-def get_user_music(user_id: int, month, year) -> list:
+def get_user_music_stats(user_id: int, month, year) -> list:
     query = (
-        session.query(Music)
+        session.query(MusicStats)
         .filter(
-            (Music.user_id == user_id) & (Music.month == month) & (Music.year == year)
+            (MusicStats.user_id == user_id)
+            & (MusicStats.month == month)
+            & (MusicStats.year == year)
         )
-        .order_by(Music.count)
+        .order_by(MusicStats.count)
         .all()
     )
     return list(query)
 
 
-def get_current_month_and_year() -> tuple:
-    current_date = datetime.date.today()
-    month = current_date.month
-    year = current_date.year
-
-    return month, year
-
-
 def pump_stats(user_id: int, music_title: str) -> None:
+    music_request = MusicRequest(user_id=user_id, title=music_title)
+    session.add(music_request)
+
     month, year = get_current_month_and_year()
-    user_song_all = get_song(
+    user_song_all = get_music_stats(
         user_id=user_id,
         title=music_title,
         month=None,
         year=None,
     )
-    user_song_month = get_song(
+    user_song_month = get_music_stats(
         user_id=user_id,
         title=music_title,
         month=month,
         year=year,
     )
-    all_song_all = get_song(
+    all_song_all = get_music_stats(
         user_id=-1,
         title=music_title,
         month=None,
         year=None,
     )
-    all_song_month = get_song(
+    all_song_month = get_music_stats(
         user_id=-1,
         title=music_title,
         month=month,
@@ -149,10 +151,10 @@ class MusicBot(commands.Cog):
         month, year = get_current_month_and_year()
         month_name = calendar.month_name[month]
 
-        user_song_all = get_user_music(user_id=user_id, month=None, year=None)
-        user_song_month = get_user_music(user_id=user_id, month=month, year=year)
-        all_song_all = get_user_music(user_id=-1, month=None, year=None)
-        all_song_month = get_user_music(user_id=-1, month=month, year=year)
+        user_song_all = get_user_music_stats(user_id=user_id, month=None, year=None)
+        user_song_month = get_user_music_stats(user_id=user_id, month=month, year=year)
+        all_song_all = get_user_music_stats(user_id=-1, month=None, year=None)
+        all_song_month = get_user_music_stats(user_id=-1, month=month, year=year)
 
         embed = Embed(
             title=random.choice(MUSIC_STATS_TITLES),

@@ -38,17 +38,31 @@ OFFLINE_MESSAGES = [
 ]
 
 
+def setup_db():
+    # Добавляет юзера с id -1 в бд
+    no_user_id = -1
+    user = session.query(User).filter(User.id == no_user_id).first()
+    if not user:
+        user = User(id=no_user_id)
+        session.add(user)
+        session.commit()
+
+
+def register_user(user_id: int) -> None:
+    user = session.query(User).filter(User.id == user_id).first()
+    if not user:
+        user = User(id=user_id)
+        session.add(user)
+        session.commit()
+
+
 class HypixelBot(commands.Bot):
     async def on_message(self, message: discord.Message):
         if message.author == self.user:
             return
 
         user_id = message.author.id
-        user = session.query(User).filter(User.id == user_id).first()
-        if not user:
-            user = User(id=user_id)
-            session.add(user)
-            session.commit()
+        register_user(user_id)
 
         return await super().on_message(message)
 
@@ -127,5 +141,6 @@ def main():
 
 if __name__ == "__main__":
     session = create_session()
+    setup_db()
 
     main()

@@ -9,5 +9,8 @@ class User(Base):
 
     id = Column(Integer, primary_key=True)
 
-    music = relationship("Music", back_populates="user")
     chat_notifiers = relationship("ChatNotifier", back_populates="user")
+    news_requests = relationship("NewsRequest", back_populates="user")
+    news_stats = relationship("NewsStats", back_populates="user")
+    music_requests = relationship("MusicRequest", back_populates="user")
+    music_stats = relationship("MusicStats", back_populates="user")
