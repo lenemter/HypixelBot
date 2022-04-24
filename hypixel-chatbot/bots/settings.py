@@ -8,9 +8,11 @@ from discord.ext.commands.context import Context
 session = create_session()
 
 
-def get_chat_notifier(chat_id: int):
+def get_chat_notifier(channel_id: int):
     chat_notifier = (
-        session.query(ChatNotifier).filter(ChatNotifier.chat_id == chat_id).first()
+        session.query(ChatNotifier)
+        .filter(ChatNotifier.channel_id == channel_id)
+        .first()
     )
 
     return chat_notifier
@@ -25,14 +27,14 @@ class SettingsBot(commands.Cog):
     @commands.group(name="settings")
     async def settings(self, ctx: Context):
         if ctx.invoked_subcommand is None:
-            chat_id = ctx.channel.id
+            channel_id = ctx.channel.id
 
             embed = Embed(
                 title="Настройки",
                 color=REGULAR_COLOR,
             )
 
-            chat_notifier = get_chat_notifier(chat_id)
+            chat_notifier = get_chat_notifier(channel_id)
             embed.add_field(
                 name="Уведомления о запуске/остановке",
                 value=(
@@ -47,11 +49,11 @@ class SettingsBot(commands.Cog):
     @settings.command()
     async def notification(self, ctx: Context):
         user_id = ctx.author.id
-        chat_id = ctx.channel.id
-        chat_notifier = get_chat_notifier(chat_id)
+        channel_id = ctx.channel.id
+        chat_notifier = get_chat_notifier(channel_id)
 
         if chat_notifier is None:
-            chat_notifier = ChatNotifier(user_id=user_id, chat_id=chat_id)
+            chat_notifier = ChatNotifier(user_id=user_id, channel_id=channel_id)
             session.add(chat_notifier)
         else:
             session.delete(chat_notifier)

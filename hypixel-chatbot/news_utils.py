@@ -26,6 +26,9 @@ def get_news(count: int = 10):
         news_div_soup = BeautifulSoup(str(news_div), "html.parser")
         news_a = news_div_soup.findAll("a", {"href": LINK_REGEX})
 
+        if not news_a:
+            break
+
         for a in news_a:
             link = a["href"].rstrip("unread")
             link = f"{HYPIXEL_URL}{link}"
@@ -35,8 +38,5 @@ def get_news(count: int = 10):
 
             if len(result_links) == count:
                 return result_links
-
-        if not news_a:
-            break
 
     return result_links

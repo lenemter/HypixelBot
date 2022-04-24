@@ -1,5 +1,6 @@
 from sqlalchemy import *
 from sqlalchemy.orm import relationship
+
 from ..db_session import Base
 
 
@@ -10,4 +11,4 @@ class ChatNotifier(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship("User", back_populates="chat_notifiers")
 
-    chat_id = Column(Integer, nullable=False)
+    channel_id = Column(Integer, nullable=False)
