@@ -27,7 +27,7 @@ def add_field_notification(embed: Embed, channel_id: int) -> Embed:
     notifier_status = chat_notifier is not None
 
     embed.add_field(
-        name="⏰ Уведомления о запуске/остановке",
+        name=("🔔" if notifier_status else "🔕" + " Уведомления о запуске/остановке"),
         value=(
             bool_to_message(notifier_status)
             + "\n"
