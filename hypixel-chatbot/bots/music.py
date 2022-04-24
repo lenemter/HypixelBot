@@ -4,7 +4,7 @@ import os
 import random
 from pathlib import Path
 
-from common import SUCCESS_COLOR
+from common import REGULAR_COLOR, SUCCESS_COLOR, COMMAND_PREFIX, WAIT_MESSAGE
 from database.__all_models import Music
 from database.db_session import create_session
 from discord import Embed, File
@@ -15,15 +15,18 @@ session = create_session()
 
 
 MUSIC_TITLES = [
-    "Вот ваша музыка",
-    "Музыка",
-    "Minecraft Music",
+    "🎵 Вот ваша музыка",
+    "🎵 Музыка",
+    "🎵 Minecraft Music",
 ]
 
-MUSIC_STATS_TITLES = ["Статистика музыки", "Музыкальная статистика"]
+MUSIC_STATS_TITLES = [
+    "Статистика музыки",
+    "Музыкальная статистика",
+]
 
 
-def get_song(user_id: int, title: str, month, year):
+def get_song(user_id: int, title: str, month, year) -> Music:
     """Gets song by params, if result is None, new music object will be created automatically"""
     song = (
         session.query(Music)
@@ -64,6 +67,41 @@ def get_current_month_and_year() -> tuple:
     return month, year
 
 
+def pump_stats(user_id: int, music_title: str) -> None:
+    month, year = get_current_month_and_year()
+    user_song_all = get_song(
+        user_id=user_id,
+        title=music_title,
+        month=None,
+        year=None,
+    )
+    user_song_month = get_song(
+        user_id=user_id,
+        title=music_title,
+        month=month,
+        year=year,
+    )
+    all_song_all = get_song(
+        user_id=-1,
+        title=music_title,
+        month=None,
+        year=None,
+    )
+    all_song_month = get_song(
+        user_id=-1,
+        title=music_title,
+        month=month,
+        year=year,
+    )
+
+    user_song_all.count += 1
+    user_song_month.count += 1
+    all_song_all.count += 1
+    all_song_month.count += 1
+
+    session.commit()
+
+
 def generate_stats_description(music_query):
     count = sum((song.count for song in music_query))
     count_str = f"Количество: {count}"
@@ -85,37 +123,25 @@ class MusicBot(commands.Cog):
             file_path = Path("music/" + random.choice(os.listdir("music/")))
             file = File(file_path.absolute())
 
-            music_title = file_path.stem
             user_id = ctx.author.id
-            month, year = get_current_month_and_year()
+            music_title = file_path.stem
 
+            embed = Embed(
+                title="🚀 Отправляем музыку…",
+                description=WAIT_MESSAGE,
+                color=REGULAR_COLOR,
+            )
+            message = await ctx.send(embed=embed)
+            await ctx.send(file=file)
             embed = Embed(
                 title=random.choice(MUSIC_TITLES),
                 description=music_title,
                 color=SUCCESS_COLOR,
             )
-            await ctx.send(embed=embed)
-            await ctx.send(file=file)
+            embed.set_footer(text=f"Статистика — {COMMAND_PREFIX}music stats")
+            await message.edit(embed=embed)
 
-            user_song_all = get_song(
-                user_id=user_id, title=music_title, month=None, year=None
-            )
-            user_song_month = get_song(
-                user_id=user_id, title=music_title, month=month, year=year
-            )
-            all_song_all = get_song(
-                user_id=-1, title=music_title, month=None, year=None
-            )
-            all_song_month = get_song(
-                user_id=-1, title=music_title, month=month, year=year
-            )
-
-            user_song_all.count += 1
-            user_song_month.count += 1
-            all_song_all.count += 1
-            all_song_month.count += 1
-
-            session.commit()
+            pump_stats(user_id, music_title)
 
     @music.command()
     async def stats(self, ctx: Context):

@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 
 import sqlalchemy
 import sqlalchemy.ext.declarative
@@ -23,6 +24,9 @@ def global_init(db_file) -> None:
 
     conn_str = f"sqlite:///{db_file}?check_same_thread=False"
     logging.debug(f"Подключение к базе данных по адресу {conn_str}")
+
+    db_path = Path(db_file).parent
+    db_path.mkdir(parents=True, exist_ok=True)
 
     engine = sqlalchemy.create_engine(conn_str, echo=False)
     __factory = sqlalchemy.orm.sessionmaker(bind=engine)
