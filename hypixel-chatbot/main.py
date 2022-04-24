@@ -6,13 +6,15 @@ import discord
 from discord.ext import commands
 
 from common import (
-    ACTIVITY_STATUS,
+    TOKEN,
     COMMAND_PREFIX,
     DATABASE_PATH,
-    ERROR_COLOR,
+    ACTIVITY_STATUS,
+    ERROR_MESSAGE,
     SUCCESS_COLOR,
     TOKEN,
     ERROR_MESSAGE,
+    ERROR_COLOR,
 )
 from database.__all_models import ChatNotifier, User
 from database.db_session import create_session, global_init
@@ -44,7 +46,7 @@ class HypixelBot(commands.Bot):
             return
 
         user_id = message.author.id
-        user = session.query(User).filter(User.id == user_id)
+        user = session.query(User).filter(User.id == user_id).first()
         if not user:
             user = User(id=user_id)
             session.add(user)

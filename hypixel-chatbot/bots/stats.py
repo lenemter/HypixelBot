@@ -1,7 +1,7 @@
 from ntpath import join
 
 import hypixel
-from common import API_KEY, ERROR_COLOR, SUCCESS_COLOR
+from common import API_KEY, ERROR_MESSAGE, SUCCESS_COLOR, ERROR_COLOR
 from discord import Embed
 from discord.ext import commands
 from discord.ext.commands.context import Context
@@ -37,7 +37,7 @@ class HypixelStats(commands.Cog):
                 player_status = await client.player_status(nickname)
             except HypixelException:
                 embed = Embed(
-                    title=f"❌ Ошибка!",
+                    title=ERROR_MESSAGE,
                     description=(f"Такого игрока не существует"),
                     color=ERROR_COLOR,
                 )
@@ -101,7 +101,7 @@ class HypixelStats(commands.Cog):
                 player = await client.player(nickname)
             except HypixelException:
                 embed = Embed(
-                    title=f"❌ Ошибка!",
+                    title=ERROR_MESSAGE,
                     description=(f"Такого игрока не существует"),
                     color=ERROR_COLOR,
                 )
@@ -138,7 +138,7 @@ class HypixelStats(commands.Cog):
                 player = await client.player(nickname)
             except HypixelException:
                 embed = Embed(
-                    title=f"❌ Ошибка!",
+                    title=ERROR_MESSAGE,
                     description=(f"Такого игрока не существует"),
                     color=ERROR_COLOR,
                 )
@@ -274,7 +274,7 @@ class HypixelStats(commands.Cog):
                 player = await client.player(nickname)
             except HypixelException:
                 embed = Embed(
-                    title=f"❌ Ошибка!",
+                    title=ERROR_MESSAGE,
                     description=(f"Такого игрока не существует"),
                     color=ERROR_COLOR,
                 )
@@ -335,7 +335,7 @@ class HypixelStats(commands.Cog):
                 player = await client.player(nickname)
             except HypixelException:
                 embed = Embed(
-                    title=f"❌ Ошибка!",
+                    title=ERROR_MESSAGE,
                     description=(f"Такого игрока не существует"),
                     color=ERROR_COLOR,
                 )
@@ -395,7 +395,7 @@ class HypixelStats(commands.Cog):
                 player = await client.player(nickname)
             except HypixelException:
                 embed = Embed(
-                    title=f"❌ Ошибка!",
+                    title=ERROR_MESSAGE,
                     description=(f"Такого игрока не существует"),
                     color=ERROR_COLOR,
                 )
@@ -452,7 +452,7 @@ class HypixelStats(commands.Cog):
                 player = await client.player(nickname)
             except HypixelException:
                 embed = Embed(
-                    title=f"❌ Ошибка!",
+                    title=ERROR_MESSAGE,
                     description=(f"Такого игрока не существует"),
                     color=ERROR_COLOR,
                 )
@@ -501,7 +501,7 @@ class HypixelStats(commands.Cog):
                 player = await client.player(nickname)
             except HypixelException:
                 embed = Embed(
-                    title=f"❌ Ошибка!",
+                    title=ERROR_MESSAGE,
                     description=(f"Такого игрока не существует"),
                     color=ERROR_COLOR,
                 )
