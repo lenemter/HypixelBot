@@ -6,12 +6,13 @@ import discord
 from discord.ext import commands
 
 from common import (
-    ACTIVITY_STATUS,
+    TOKEN,
     COMMAND_PREFIX,
     DATABASE_PATH,
-    ERROR_COLOR,
+    ACTIVITY_STATUS,
+    ERROR_MESSAGE,
     SUCCESS_COLOR,
-    TOKEN,
+    ERROR_COLOR,
 )
 from database.__all_models import ChatNotifier, User
 from database.db_session import create_session, global_init
@@ -80,7 +81,7 @@ class HypixelBot(commands.Bot):
     async def on_command_error(self, context, exception):
         if isinstance(exception, commands.CommandNotFound):
             embed = discord.Embed(
-                title="❌ Ошибка!",
+                title=ERROR_MESSAGE,
                 description="Неизвестная команда",
                 color=ERROR_COLOR,
             )

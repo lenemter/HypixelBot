@@ -1,9 +1,10 @@
 from common import (
     COMMAND_PREFIX,
-    ERROR_COLOR,
+    ERROR_MESSAGE,
+    WAIT_MESSAGE,
     REGULAR_COLOR,
     SUCCESS_COLOR,
-    WAIT_MESSAGE,
+    ERROR_COLOR,
 )
 from discord import Embed
 from discord.ext import commands
@@ -21,7 +22,7 @@ class NewsBot(commands.Cog):
     async def news(self, ctx: Context, count: int = 3, confirmation: bool = False):
         if count <= 0:
             embed = Embed(
-                title="❌ Ошибка!",
+                title=ERROR_MESSAGE,
                 description="Не могу отправить так мало новостей",
                 color=ERROR_COLOR,
             )
@@ -30,7 +31,7 @@ class NewsBot(commands.Cog):
 
         if count >= 20 and not confirmation:
             embed = Embed(
-                title="❌ Ошибка!",
+                title=ERROR_MESSAGE,
                 description=(
                     f"Слишком много новостей, бот будет спамить\n"
                     f"Введите `{COMMAND_PREFIX}news {count} True` чтобы подтвердить команду"
