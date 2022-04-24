@@ -1,4 +1,10 @@
-from common import COMMAND_PREFIX, ERROR_COLOR, SUCCESS_COLOR
+from common import (
+    COMMAND_PREFIX,
+    ERROR_COLOR,
+    REGULAR_COLOR,
+    SUCCESS_COLOR,
+    WAIT_MESSAGE,
+)
 from discord import Embed
 from discord.ext import commands
 from discord.ext.commands.context import Context
@@ -34,12 +40,19 @@ class NewsBot(commands.Cog):
             await ctx.send(embed=embed)
             return
 
+        embed = Embed(
+            title="🚀 Получаем новости…",
+            description=WAIT_MESSAGE,
+            color=REGULAR_COLOR,
+        )
+        message = await ctx.send(embed=embed)
+
         news = get_news(count)
         embed = Embed(
             title="Последние посты" if len(news) >= 2 else "Последний пост",
             color=SUCCESS_COLOR,
         )
-        await ctx.send(embed=embed)
+        await message.edit(embed=embed)
 
         for link in news:
             await ctx.send(link)

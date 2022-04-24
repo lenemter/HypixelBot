@@ -1,10 +1,18 @@
 import locale
 import logging
+import random
 
 import discord
 from discord.ext import commands
 
-from common import COMMAND_PREFIX, DATABASE_PATH, ERROR_COLOR, SUCCESS_COLOR, TOKEN
+from common import (
+    ACTIVITY_STATUS,
+    COMMAND_PREFIX,
+    DATABASE_PATH,
+    ERROR_COLOR,
+    SUCCESS_COLOR,
+    TOKEN,
+)
 from database.__all_models import ChatNotifier, User
 from database.db_session import create_session, global_init
 
@@ -17,6 +25,16 @@ from bots.settings import SettingsBot
 from bots.stats import HypixelStats
 
 locale.setlocale(locale.LC_ALL, "ru_RU")
+
+
+ONLINE_MESSAGES = [
+    "Бот теперь онлайн",
+    "Бот запущен",
+]
+OFFLINE_MESSAGES = [
+    "Бот теперь оффлайн",
+    "Бот отключен",
+]
 
 
 class HypixelBot(commands.Bot):
@@ -36,22 +54,37 @@ class HypixelBot(commands.Bot):
     async def on_ready(self):
         chat_notifiers = session.query(ChatNotifier)
         for chat_notifier in chat_notifiers:
-            chat_id = chat_notifier.chat_id
-            channel = self.get_channel(chat_id)
+            channel_id = chat_notifier.channel_id
+            channel = self.get_channel(channel_id)
 
-            embed = discord.Embed(title="Бот теперь онлайн", color=SUCCESS_COLOR)
+            embed = discord.Embed(
+                title=random.choice(ONLINE_MESSAGES),
+                color=SUCCESS_COLOR,
+            )
             await channel.send(embed=embed)
 
     async def close(self):
         chat_notifiers = session.query(ChatNotifier)
         for chat_notifier in chat_notifiers:
-            chat_id = chat_notifier.chat_id
-            channel = self.get_channel(chat_id)
+            channel_id = chat_notifier.channel_id
+            channel = self.get_channel(channel_id)
 
-            embed = discord.Embed(title="Бот теперь оффлайн", color=ERROR_COLOR)
+            embed = discord.Embed(
+                title=random.choice(OFFLINE_MESSAGES),
+                color=ERROR_COLOR,
+            )
             await channel.send(embed=embed)
 
         return await super().close()
+
+    async def on_command_error(self, context, exception):
+        if isinstance(exception, commands.CommandNotFound):
+            embed = discord.Embed(
+                title="❌ Ошибка!",
+                description="Неизвестная команда",
+                color=ERROR_COLOR,
+            )
+            await context.send(embed=embed)
 
 
 def setup_logging():
@@ -69,9 +102,14 @@ def start_bot():
     intents.members = True
 
     activity = discord.Activity(
-        name=f"{COMMAND_PREFIX}help", type=discord.ActivityType.playing
+        name=ACTIVITY_STATUS,
+        type=discord.ActivityType.playing,
     )
-    bot = HypixelBot(command_prefix=COMMAND_PREFIX, intents=intents, activity=activity)
+    bot = HypixelBot(
+        command_prefix=COMMAND_PREFIX,
+        intents=intents,
+        activity=activity,
+    )
 
     bot.add_cog(NewsBot(bot))
     bot.add_cog(HypixelStats(bot))
