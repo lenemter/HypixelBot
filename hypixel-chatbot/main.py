@@ -12,6 +12,7 @@ from common import (
     ERROR_COLOR,
     SUCCESS_COLOR,
     TOKEN,
+    ERROR_MESSAGE,
 )
 from database.__all_models import ChatNotifier, User
 from database.db_session import create_session, global_init
@@ -78,12 +79,13 @@ class HypixelBot(commands.Bot):
         return await super().close()
 
     async def on_command_error(self, context, exception):
-        embed = discord.Embed(
-            title="❌ Ошибка!",
-            description="Неизвестная команда",
-            color=ERROR_COLOR,
-        )
-        await context.send(embed=embed)
+        if isinstance(exception, commands.CommandNotFound):
+            embed = discord.Embed(
+                title=ERROR_MESSAGE,
+                description="Неизвестная команда",
+                color=ERROR_COLOR,
+            )
+            await context.send(embed=embed)
 
 
 def setup_logging():
