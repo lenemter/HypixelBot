@@ -77,6 +77,15 @@ class HypixelBot(commands.Bot):
 
         return await super().close()
 
+    async def on_command_error(self, context, exception):
+        embed = discord.Embed(
+            title="❌ Ошибка!",
+            description="Неизвестная команда",
+            color=ERROR_COLOR,
+        )
+        await context.send(embed=embed)
+        return await super().on_command_error(context, exception)
+
 
 def setup_logging():
     logger = logging.getLogger("discord")
