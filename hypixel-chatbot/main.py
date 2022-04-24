@@ -43,7 +43,7 @@ class HypixelBot(commands.Bot):
             return
 
         user_id = message.author.id
-        user = session.query(User).filter(User.id == user_id)
+        user = session.query(User).filter(User.id == user_id).first()
         if not user:
             user = User(id=user_id)
             session.add(user)
