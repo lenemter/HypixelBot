@@ -7,6 +7,7 @@ DATABASE_PATH = "database/database.db"
 COMMAND_PREFIX = "!"
 ACTIVITY_STATUS = f"{COMMAND_PREFIX}help"
 WAIT_MESSAGE = "Это может занять некоторое время"
+ERROR_MESSAGE = "❌ Ошибка!"
 
 REGULAR_COLOR = Color.gold()
 SUCCESS_COLOR = Color.green()
