@@ -84,7 +84,6 @@ class HypixelBot(commands.Bot):
             color=ERROR_COLOR,
         )
         await context.send(embed=embed)
-        return await super().on_command_error(context, exception)
 
 
 def setup_logging():
