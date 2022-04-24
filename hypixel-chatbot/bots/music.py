@@ -103,25 +103,17 @@ class MusicBot(commands.Cog):
             user_song_month = get_song(
                 user_id=user_id, title=music_title, month=month, year=year
             )
-            user_song_year = get_song(
-                user_id=user_id, title=music_title, month=None, year=year
-            )
             all_song_all = get_song(
                 user_id=-1, title=music_title, month=None, year=None
             )
             all_song_month = get_song(
                 user_id=-1, title=music_title, month=month, year=year
             )
-            all_song_year = get_song(
-                user_id=-1, title=music_title, month=None, year=year
-            )
 
             user_song_all.count += 1
             user_song_month.count += 1
-            user_song_year.count += 1
             all_song_all.count += 1
             all_song_month.count += 1
-            all_song_year.count += 1
 
             session.commit()
 

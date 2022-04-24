@@ -8,5 +8,6 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
+
     music = relationship("Music", back_populates="user")
     chat_notifiers = relationship("ChatNotifier", back_populates="user")

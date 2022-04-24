@@ -18,8 +18,8 @@ def global_init(db_file) -> None:
     db_file = db_file.strip()
 
     if not db_file:
-        logging.error("Необходимо указать файл базы данных.")
-        raise Exception("Необходимо указать файл базы данных.")
+        logging.error("Необходимо указать файл базы данных")
+        raise Exception("Необходимо указать файл базы данных")
 
     conn_str = f"sqlite:///{db_file}?check_same_thread=False"
     logging.debug(f"Подключение к базе данных по адресу {conn_str}")

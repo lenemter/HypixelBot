@@ -18,6 +18,39 @@ def get_chat_notifier(channel_id: int):
     return chat_notifier
 
 
+def bool_to_message(status: bool) -> str:
+    return "Включено" if status else "Выключено"
+
+
+def add_field_notification(embed: Embed, channel_id: int) -> Embed:
+    chat_notifier = get_chat_notifier(channel_id)
+    notifier_status = chat_notifier is not None
+
+    embed.add_field(
+        name="⏰ Уведомления о запуске/остановке",
+        value=(
+            bool_to_message(notifier_status)
+            + "\n"
+            + f"`{COMMAND_PREFIX}settings notification`\n"
+        ),
+        inline=True,
+    )
+
+    return embed
+
+
+def toggle_notifier(user_id: int, channel_id: int) -> None:
+    chat_notifier = get_chat_notifier(channel_id)
+
+    if chat_notifier is None:
+        chat_notifier = ChatNotifier(user_id=user_id, channel_id=channel_id)
+        session.add(chat_notifier)
+    else:
+        session.delete(chat_notifier)
+
+    session.commit()
+
+
 class SettingsBot(commands.Cog):
     def __init__(self, bot, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -30,19 +63,10 @@ class SettingsBot(commands.Cog):
             channel_id = ctx.channel.id
 
             embed = Embed(
-                title="Настройки",
+                title="⚙️ Настройки",
                 color=REGULAR_COLOR,
             )
-
-            chat_notifier = get_chat_notifier(channel_id)
-            embed.add_field(
-                name="Уведомления о запуске/остановке",
-                value=(
-                    f"`{COMMAND_PREFIX}settings notification`\n"
-                    + str(chat_notifier is not None)
-                ),
-                inline=True,
-            )
+            embed = add_field_notification(embed, channel_id)
 
             await ctx.send(embed=embed)
 
@@ -50,18 +74,12 @@ class SettingsBot(commands.Cog):
     async def notification(self, ctx: Context):
         user_id = ctx.author.id
         channel_id = ctx.channel.id
-        chat_notifier = get_chat_notifier(channel_id)
-
-        if chat_notifier is None:
-            chat_notifier = ChatNotifier(user_id=user_id, channel_id=channel_id)
-            session.add(chat_notifier)
-        else:
-            session.delete(chat_notifier)
-
-        session.commit()
+        toggle_notifier(user_id, channel_id)
 
         embed = Embed(
-            title="Сохранено",
+            title="✅ Сохранено",
             color=SUCCESS_COLOR,
         )
+        embed = add_field_notification(embed, channel_id)
+
         await ctx.send(embed=embed)
