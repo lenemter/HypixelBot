@@ -5,9 +5,9 @@ from pathlib import Path
 
 from common import (
     COMMAND_PREFIX,
+    LOADING_EMBED,
     REGULAR_COLOR,
     SUCCESS_COLOR,
-    WAIT_MESSAGE,
     get_current_month_and_year,
 )
 from database.__all_models import MusicRequest, MusicStats
@@ -122,18 +122,14 @@ class MusicBot(commands.Cog):
     @commands.group(name="music")
     async def music(self, ctx: Context):
         if ctx.invoked_subcommand is None:
+            message = await ctx.send(embed=LOADING_EMBED)
+
             file_path = Path("music/" + random.choice(os.listdir("music/")))
             file = File(file_path.absolute())
 
             user_id = ctx.author.id
             music_title = file_path.stem
 
-            embed = Embed(
-                title="🚀 Отправляем музыку…",
-                description=WAIT_MESSAGE,
-                color=REGULAR_COLOR,
-            )
-            message = await ctx.send(embed=embed)
             await ctx.send(file=file)
             embed = Embed(
                 title=random.choice(MUSIC_TITLES),
@@ -147,6 +143,8 @@ class MusicBot(commands.Cog):
 
     @music.command()
     async def stats(self, ctx: Context):
+        message = await ctx.send(embed=LOADING_EMBED)
+
         user_id = ctx.author.id
         month, year = get_current_month_and_year()
         month_name = calendar.month_name[month]
@@ -184,4 +182,4 @@ class MusicBot(commands.Cog):
             value=generate_stats_description(all_song_all),
             inline=False,
         )
-        await ctx.send(embed=embed)
+        await message.edit(embed=embed)
