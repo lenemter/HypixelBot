@@ -1,10 +1,19 @@
+from ntpath import join
+
 import hypixel
 from common import API_KEY, ERROR_MESSAGE, SUCCESS_COLOR, ERROR_COLOR
 from discord import Embed
 from discord.ext import commands
 from discord.ext.commands.context import Context
 from hypixel import HypixelException
-from stats_utils import create_head, format_date, format_number, round_number
+from stats_utils import (
+    create_head,
+    floor_number,
+    format_date,
+    format_number,
+    get_player_by_uuid,
+    round_number,
+)
 
 
 class HypixelStats(commands.Cog):
@@ -25,6 +34,7 @@ class HypixelStats(commands.Cog):
             try:
                 player = await client.player(nickname)
                 friends = await client.player_friends(nickname)
+                player_status = await client.player_status(nickname)
             except HypixelException:
                 embed = Embed(
                     title=ERROR_MESSAGE,
@@ -48,6 +58,12 @@ class HypixelStats(commands.Cog):
         else:
             last_game = player.most_recent_game.clean_name
 
+        status = player_status.online
+        if status:
+            status = f"На сервере — {player_status.game_type.clean_name}"
+        else:
+            status = "Оффлайн"
+
         embed = Embed(
             title=f"📊 Статистика {player.name}",
             description=(
@@ -61,7 +77,9 @@ class HypixelStats(commands.Cog):
                 f"\n"
                 f"Первый вход: {format_date(player.first_login)}\n"
                 f"Последний вход: {last_login}\n"
-                f"Последняя игра: {last_game}"
+                f"Последняя игра: {last_game}\n"
+                f"\n"
+                f"Статус: {status}"
             ),
             color=SUCCESS_COLOR,
         )
@@ -149,6 +167,96 @@ class HypixelStats(commands.Cog):
             color=SUCCESS_COLOR,
         )
         embed.set_thumbnail(url=create_head(player_uuid))
+        embed.set_footer(text="Помощь — !help")
+
+        await ctx.send(embed=embed)
+
+    @commands.command(name="guild")
+    async def get_guild(self, ctx: Context, guild_name: str = ""):
+        if not guild_name:
+            embed = Embed(
+                title=f"❌ Ошибка!",
+                description=(f"Введите название гильдии"),
+                color=ERROR_COLOR,
+            )
+            embed.set_footer(text="Использование — !guild <название>")
+            await ctx.send(embed=embed)
+
+        guild_name = guild_name.lower()
+
+        client = hypixel.Client(API_KEY)
+        async with client:
+            try:
+                guild = await client.guild_by_name(guild_name)
+            except HypixelException:
+                embed = Embed(
+                    title=f"❌ Ошибка!",
+                    description=(f"Такой гильдии не существует"),
+                    color=ERROR_COLOR,
+                )
+                embed.set_footer(text="Использование — !guild <название>")
+                await ctx.send(embed=embed)
+
+        description = guild.description
+        if not description:
+            description = "—"
+
+        tag_color = guild.tag_color
+        if not tag_color:
+            tag_color = "Серый"
+        elif tag_color.clean_name == "Dark-Aqua":
+            tag_color = "Бирюзовый"
+        elif tag_color.clean_name == "Dark-Green":
+            tag_color = "Тёмно-зеленый"
+        elif tag_color.clean_name == "Yellow":
+            tag_color = "Жёлтый"
+        elif tag_color.clean_name == "Gold":
+            tag_color = "Золотой"
+
+        publically_listed = guild.publicly_listed
+        if publically_listed:
+            publically_listed = "Да"
+        else:
+            publically_listed = "Нет"
+
+        joinable = guild.joinable
+        if joinable:
+            joinable = "Да"
+        else:
+            joinable = "Нет"
+
+        favorite_games = list()
+        for game in guild.preferred_games:
+            favorite_games.append(game.clean_name)
+        if not favorite_games:
+            favorite_games.append("—")
+
+        embed = Embed(
+            title=f"🛡️ Гильдия {guild.name}",
+            description=(
+                f"Название: {guild.name}\n"
+                f"Тэг: [{guild.tag}]\n"
+                f"Цвет тэга: {tag_color}\n"
+                f"\n"
+                f"Описание: {description}\n"
+                f"\n"
+                f"Уровень: {format_number(floor_number(guild.level))}"
+                f"\n"
+                f"Глава гильдии: {get_player_by_uuid(guild.members[0].uuid)}\n"
+                f"Участники: {format_number(len(guild.members))}\n"
+                f"\n"
+                f"Создана: {format_date(guild.created)}\n"
+                f"\n"
+                f"Опыт гильдии:\n"
+                f"Всего: {format_number(guild.exp)}\n"
+                f"\n"
+                f"Публичная: {publically_listed}\n"
+                f"Открытая: {joinable}\n"
+                f"\n"
+                f"Любимые игры: {', '.join(favorite_games)}"
+            ),
+            color=SUCCESS_COLOR,
+        )
         embed.set_footer(text="Помощь — !help")
 
         await ctx.send(embed=embed)
