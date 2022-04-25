@@ -1,6 +1,5 @@
-import random
-
 from common import (
+    LOADING_EMBED,
     COMMAND_PREFIX,
     ERROR_COLOR,
     ERROR_MESSAGE,
@@ -33,7 +32,7 @@ def get_news_stats(user_id: int, month, year) -> NewsStats:
     )
 
     if news_stats is None:
-        music_news_statsstats = NewsStats(user_id=user_id, month=month, year=year)
+        news_stats = NewsStats(user_id=user_id, month=month, year=year)
         session.add(news_stats)
         session.commit()
 
@@ -100,6 +99,8 @@ class NewsBot(commands.Cog):
         if count == "stats":
             await self.stats(ctx)
         elif is_num(count):
+            message = await ctx.send(embed=LOADING_EMBED)
+
             count = int(count)
             if count <= 0:
                 embed = Embed(
@@ -107,7 +108,7 @@ class NewsBot(commands.Cog):
                     description="Не могу отправить так мало новостей",
                     color=ERROR_COLOR,
                 )
-                await ctx.send(embed=embed)
+                await message.edit(embed=embed)
                 return
 
             if count >= 20 and not confirmation:
@@ -119,15 +120,8 @@ class NewsBot(commands.Cog):
                     ),
                     color=ERROR_COLOR,
                 )
-                await ctx.send(embed=embed)
+                await message.edit(embed=embed)
                 return
-
-            embed = Embed(
-                title="🚀 Получаем новости…",
-                description=WAIT_MESSAGE,
-                color=REGULAR_COLOR,
-            )
-            message = await ctx.send(embed=embed)
 
             news = get_news(count)
             embed = Embed(
@@ -152,6 +146,8 @@ class NewsBot(commands.Cog):
             await message.edit(embed=embed)
 
     async def stats(self, ctx: Context):
+        message = await ctx.send(embed=LOADING_EMBED)
+
         user_id = ctx.author.id
         month, year = get_current_month_and_year()
         month_name = num_to_month(month)
@@ -168,25 +164,25 @@ class NewsBot(commands.Cog):
 
         # User
         embed.add_field(
-            name=f"Ваша музыка за {month_name}",
+            name=f"Ваши запросы новосей за {month_name}",
             value=generate_stats_description(user_news_month),
             inline=False,
         )
         embed.add_field(
-            name="Ваша музыка за всё время",
+            name="Ваши запросы новостей за всё время",
             value=generate_stats_description(user_news_all),
             inline=False,
         )
 
         # All
         embed.add_field(
-            name=f"Вся музыка за {month_name}",
+            name=f"Все запросы новостей за {month_name}",
             value=generate_stats_description(all_news_month),
             inline=False,
         )
         embed.add_field(
-            name="Вся музыка за всё время",
+            name="Все запросы новостей за всё время",
             value=generate_stats_description(all_news_all),
             inline=False,
         )
-        await ctx.send(embed=embed)
+        await message.edit(embed=embed)

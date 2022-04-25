@@ -1,5 +1,12 @@
 import hypixel
-from common import API_KEY, COMMAND_PREFIX, ERROR_COLOR, ERROR_MESSAGE, SUCCESS_COLOR
+from common import (
+    API_KEY,
+    COMMAND_PREFIX,
+    ERROR_COLOR,
+    ERROR_MESSAGE,
+    LOADING_EMBED,
+    SUCCESS_COLOR,
+)
 from discord import Embed
 from discord.ext import commands
 from discord.ext.commands.context import Context
@@ -13,7 +20,6 @@ from stats_utils import (
     round_number,
 )
 
-
 HELP_FOOTER = f"Помощь — {COMMAND_PREFIX}help"
 NO_SUCH_PLAYER_MESSAGE = "Такого игрока не существует"
 
@@ -26,9 +32,10 @@ class HypixelStats(commands.Cog):
 
     @commands.command(name="stats")
     async def get_stats(self, ctx: Context, nickname: str = ""):
+        message = await ctx.send(embed=LOADING_EMBED)
+
         if not nickname:
             nickname = ctx.message.author.name
-
         nickname = nickname.lower()
 
         client = hypixel.Client(API_KEY)
@@ -46,7 +53,8 @@ class HypixelStats(commands.Cog):
                 embed.set_footer(
                     text=f"Использование — {COMMAND_PREFIX}stats <никнейм>"
                 )
-                await ctx.send(embed=embed)
+                await message.edit(embed=embed)
+                return
 
         player_uuid = player.uuid
 
@@ -90,13 +98,14 @@ class HypixelStats(commands.Cog):
         embed.set_thumbnail(url=create_head(player_uuid))
         embed.set_footer(text=HELP_FOOTER)
 
-        await ctx.send(embed=embed)
+        await message.edit(embed=embed)
 
     @commands.command(name="names")
     async def get_names(self, ctx: Context, nickname: str = ""):
+        message = await ctx.send(embed=LOADING_EMBED)
+
         if not nickname:
             nickname = ctx.message.author.name
-
         nickname = nickname.lower()
 
         client = hypixel.Client(API_KEY)
@@ -112,7 +121,8 @@ class HypixelStats(commands.Cog):
                 embed.set_footer(
                     text=f"Использование — {COMMAND_PREFIX}names <никнейм>"
                 )
-                await ctx.send(embed=embed)
+                await message.edit(embed=embed)
+                return
 
         player_uuid = player.uuid
 
@@ -129,13 +139,14 @@ class HypixelStats(commands.Cog):
         embed.set_thumbnail(url=create_head(player_uuid))
         embed.set_footer(text=HELP_FOOTER)
 
-        await ctx.send(embed=embed)
+        await message.edit(embed=embed)
 
     @commands.command(name="socials")
     async def get_socials(self, ctx: Context, nickname: str = ""):
+        message = await ctx.send(embed=LOADING_EMBED)
+
         if not nickname:
             nickname = ctx.message.author.name
-
         nickname = nickname.lower()
 
         client = hypixel.Client(API_KEY)
@@ -151,7 +162,8 @@ class HypixelStats(commands.Cog):
                 embed.set_footer(
                     text=f"Использование — {COMMAND_PREFIX}socials <никнейм>"
                 )
-                await ctx.send(embed=embed)
+                await message.edit(embed=embed)
+                return
 
         player_uuid = player.uuid
 
@@ -177,10 +189,12 @@ class HypixelStats(commands.Cog):
         embed.set_thumbnail(url=create_head(player_uuid))
         embed.set_footer(text=HELP_FOOTER)
 
-        await ctx.send(embed=embed)
+        await message.edit(embed=embed)
 
     @commands.command(name="guild")
     async def get_guild(self, ctx: Context, guild_name: str = ""):
+        message = await ctx.send(embed=LOADING_EMBED)
+
         if not guild_name:
             embed = Embed(
                 title=ERROR_MESSAGE,
@@ -188,8 +202,7 @@ class HypixelStats(commands.Cog):
                 color=ERROR_COLOR,
             )
             embed.set_footer(text=f"Использование — {COMMAND_PREFIX}guild <название>")
-            await ctx.send(embed=embed)
-
+            await message.edit(embed=embed)
         guild_name = guild_name.lower()
 
         client = hypixel.Client(API_KEY)
@@ -205,7 +218,8 @@ class HypixelStats(commands.Cog):
                 embed.set_footer(
                     text=f"Использование — {COMMAND_PREFIX}guild <название>"
                 )
-                await ctx.send(embed=embed)
+                await message.edit(embed=embed)
+                return
 
         description = guild.description
         if not description:
@@ -269,13 +283,14 @@ class HypixelStats(commands.Cog):
         )
         embed.set_footer(text=HELP_FOOTER)
 
-        await ctx.send(embed=embed)
+        await message.edit(embed=embed)
 
     @commands.command(name="bw")
     async def get_bw(self, ctx: Context, nickname: str = ""):
+        message = await ctx.send(embed=LOADING_EMBED)
+
         if not nickname:
             nickname = ctx.message.author.name
-
         nickname = nickname.lower()
 
         client = hypixel.Client(API_KEY)
@@ -289,7 +304,8 @@ class HypixelStats(commands.Cog):
                     color=ERROR_COLOR,
                 )
                 embed.set_footer(text=f"Использование — {COMMAND_PREFIX}bw <никнейм>")
-                await ctx.send(embed=embed)
+                await message.edit(embed=embed)
+                return
 
         player_uuid = player.uuid
 
@@ -330,13 +346,14 @@ class HypixelStats(commands.Cog):
         embed.set_thumbnail(url=create_head(player_uuid))
         embed.set_footer(text=HELP_FOOTER)
 
-        await ctx.send(embed=embed)
+        await message.edit(embed=embed)
 
     @commands.command(name="duels")
     async def get_duels(self, ctx: Context, nickname: str = ""):
+        message = await ctx.send(embed=LOADING_EMBED)
+
         if not nickname:
             nickname = ctx.message.author.name
-
         nickname = nickname.lower()
 
         client = hypixel.Client(API_KEY)
@@ -352,7 +369,8 @@ class HypixelStats(commands.Cog):
                 embed.set_footer(
                     text=f"Использование — {COMMAND_PREFIX}duels <никнейм>"
                 )
-                await ctx.send(embed=embed)
+                await message.edit(embed=embed)
+                return
 
         player_uuid = player.uuid
 
@@ -392,13 +410,14 @@ class HypixelStats(commands.Cog):
         embed.set_thumbnail(url=create_head(player_uuid))
         embed.set_footer(text=HELP_FOOTER)
 
-        await ctx.send(embed=embed)
+        await message.edit(embed=embed)
 
     @commands.command(name="arcade")
     async def get_arcade(self, ctx: Context, nickname: str = ""):
+        message = await ctx.send(embed=LOADING_EMBED)
+
         if not nickname:
             nickname = ctx.message.author.name
-
         nickname = nickname.lower()
 
         client = hypixel.Client(API_KEY)
@@ -414,7 +433,8 @@ class HypixelStats(commands.Cog):
                 embed.set_footer(
                     text=f"Использование — {COMMAND_PREFIX}arcade <никнейм>"
                 )
-                await ctx.send(embed=embed)
+                await message.edit(embed=embed)
+                return
 
         player_uuid = player.uuid
 
@@ -451,13 +471,14 @@ class HypixelStats(commands.Cog):
         embed.set_thumbnail(url=create_head(player_uuid))
         embed.set_footer(text=HELP_FOOTER)
 
-        await ctx.send(embed=embed)
+        await message.edit(embed=embed)
 
     @commands.command(name="tkr")
     async def get_tkr(self, ctx: Context, nickname: str = ""):
+        message = await ctx.send(embed=LOADING_EMBED)
+
         if not nickname:
             nickname = ctx.message.author.name
-
         nickname = nickname.lower()
 
         client = hypixel.Client(API_KEY)
@@ -471,7 +492,8 @@ class HypixelStats(commands.Cog):
                     color=ERROR_COLOR,
                 )
                 embed.set_footer(text=f"Использование — {COMMAND_PREFIX}tkr <никнейм>")
-                await ctx.send(embed=embed)
+                await message.edit(embed=embed)
+                return
 
         player_uuid = player.uuid
 
@@ -500,13 +522,14 @@ class HypixelStats(commands.Cog):
         embed.set_thumbnail(url=create_head(player_uuid))
         embed.set_footer(text=HELP_FOOTER)
 
-        await ctx.send(embed=embed)
+        await message.edit(embed=embed)
 
     @commands.command(name="paintball")
     async def get_paintball(self, ctx: Context, nickname: str = ""):
+        message = await ctx.send(embed=LOADING_EMBED)
+
         if not nickname:
             nickname = ctx.message.author.name
-
         nickname = nickname.lower()
 
         client = hypixel.Client(API_KEY)
@@ -522,7 +545,8 @@ class HypixelStats(commands.Cog):
                 embed.set_footer(
                     text=f"Использование — {COMMAND_PREFIX}paintball <никнейм>"
                 )
-                await ctx.send(embed=embed)
+                await message.edit(embed=embed)
+                return
 
         player_uuid = player.uuid
 
@@ -546,4 +570,4 @@ class HypixelStats(commands.Cog):
         embed.set_thumbnail(url=create_head(player_uuid))
         embed.set_footer(text=HELP_FOOTER)
 
-        await ctx.send(embed=embed)
+        await message.edit(embed=embed)

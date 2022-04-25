@@ -1,4 +1,4 @@
-from common import COMMAND_PREFIX, REGULAR_COLOR, SUCCESS_COLOR
+from common import COMMAND_PREFIX, REGULAR_COLOR, SUCCESS_COLOR, LOADING_EMBED
 from database.__all_models import ChatNotifier
 from database.db_session import create_session
 from discord import Embed
@@ -62,18 +62,22 @@ class SettingsBot(commands.Cog):
         if ctx.invoked_subcommand is None:
             channel_id = ctx.channel.id
 
+            message = await ctx.send(embed=LOADING_EMBED)
             embed = Embed(
                 title="⚙️ Настройки",
                 color=REGULAR_COLOR,
             )
             embed = add_field_notification(embed, channel_id)
 
-            await ctx.send(embed=embed)
+            await message.edit(embed=embed)
 
     @settings.command()
     async def notification(self, ctx: Context):
         user_id = ctx.author.id
         channel_id = ctx.channel.id
+
+        message = await ctx.send(embed=LOADING_EMBED)
+
         toggle_notifier(user_id, channel_id)
 
         embed = Embed(
@@ -82,4 +86,4 @@ class SettingsBot(commands.Cog):
         )
         embed = add_field_notification(embed, channel_id)
 
-        await ctx.send(embed=embed)
+        await message.edit(embed=embed)
