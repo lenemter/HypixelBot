@@ -1,7 +1,5 @@
-from ntpath import join
-
 import hypixel
-from common import API_KEY, ERROR_MESSAGE, SUCCESS_COLOR, ERROR_COLOR
+from common import API_KEY, COMMAND_PREFIX, ERROR_COLOR, ERROR_MESSAGE, SUCCESS_COLOR
 from discord import Embed
 from discord.ext import commands
 from discord.ext.commands.context import Context
@@ -14,6 +12,10 @@ from stats_utils import (
     get_player_by_uuid,
     round_number,
 )
+
+
+HELP_FOOTER = f"Помощь — {COMMAND_PREFIX}help"
+NO_SUCH_PLAYER_MESSAGE = "Такого игрока не существует"
 
 
 class HypixelStats(commands.Cog):
@@ -38,10 +40,12 @@ class HypixelStats(commands.Cog):
             except HypixelException:
                 embed = Embed(
                     title=ERROR_MESSAGE,
-                    description=(f"Такого игрока не существует"),
+                    description=NO_SUCH_PLAYER_MESSAGE,
                     color=ERROR_COLOR,
                 )
-                embed.set_footer(text="Использование — !stats <никнейм>")
+                embed.set_footer(
+                    text=f"Использование — {COMMAND_PREFIX}stats <никнейм>"
+                )
                 await ctx.send(embed=embed)
 
         player_uuid = player.uuid
@@ -84,7 +88,7 @@ class HypixelStats(commands.Cog):
             color=SUCCESS_COLOR,
         )
         embed.set_thumbnail(url=create_head(player_uuid))
-        embed.set_footer(text="Помощь — !help")
+        embed.set_footer(text=HELP_FOOTER)
 
         await ctx.send(embed=embed)
 
@@ -102,10 +106,12 @@ class HypixelStats(commands.Cog):
             except HypixelException:
                 embed = Embed(
                     title=ERROR_MESSAGE,
-                    description=(f"Такого игрока не существует"),
+                    description=NO_SUCH_PLAYER_MESSAGE,
                     color=ERROR_COLOR,
                 )
-                embed.set_footer(text="Использование — !names <никнейм>")
+                embed.set_footer(
+                    text=f"Использование — {COMMAND_PREFIX}names <никнейм>"
+                )
                 await ctx.send(embed=embed)
 
         player_uuid = player.uuid
@@ -121,7 +127,7 @@ class HypixelStats(commands.Cog):
             color=SUCCESS_COLOR,
         )
         embed.set_thumbnail(url=create_head(player_uuid))
-        embed.set_footer(text="Помощь — !help")
+        embed.set_footer(text=HELP_FOOTER)
 
         await ctx.send(embed=embed)
 
@@ -139,10 +145,12 @@ class HypixelStats(commands.Cog):
             except HypixelException:
                 embed = Embed(
                     title=ERROR_MESSAGE,
-                    description=(f"Такого игрока не существует"),
+                    description=NO_SUCH_PLAYER_MESSAGE,
                     color=ERROR_COLOR,
                 )
-                embed.set_footer(text="Использование — !socials <никнейм>")
+                embed.set_footer(
+                    text=f"Использование — {COMMAND_PREFIX}socials <никнейм>"
+                )
                 await ctx.send(embed=embed)
 
         player_uuid = player.uuid
@@ -163,11 +171,11 @@ class HypixelStats(commands.Cog):
 
         embed = Embed(
             title=f"📱 Социальные сети {player.name}",
-            description=(message_content),
+            description=message_content,
             color=SUCCESS_COLOR,
         )
         embed.set_thumbnail(url=create_head(player_uuid))
-        embed.set_footer(text="Помощь — !help")
+        embed.set_footer(text=HELP_FOOTER)
 
         await ctx.send(embed=embed)
 
@@ -175,11 +183,11 @@ class HypixelStats(commands.Cog):
     async def get_guild(self, ctx: Context, guild_name: str = ""):
         if not guild_name:
             embed = Embed(
-                title=f"❌ Ошибка!",
-                description=(f"Введите название гильдии"),
+                title=ERROR_MESSAGE,
+                description="Введите название гильдии",
                 color=ERROR_COLOR,
             )
-            embed.set_footer(text="Использование — !guild <название>")
+            embed.set_footer(text=f"Использование — {COMMAND_PREFIX}guild <название>")
             await ctx.send(embed=embed)
 
         guild_name = guild_name.lower()
@@ -190,11 +198,13 @@ class HypixelStats(commands.Cog):
                 guild = await client.guild_by_name(guild_name)
             except HypixelException:
                 embed = Embed(
-                    title=f"❌ Ошибка!",
-                    description=(f"Такой гильдии не существует"),
+                    title=ERROR_MESSAGE,
+                    description="Такой гильдии не существует",
                     color=ERROR_COLOR,
                 )
-                embed.set_footer(text="Использование — !guild <название>")
+                embed.set_footer(
+                    text=f"Использование — {COMMAND_PREFIX}guild <название>"
+                )
                 await ctx.send(embed=embed)
 
         description = guild.description
@@ -225,7 +235,7 @@ class HypixelStats(commands.Cog):
         else:
             joinable = "Нет"
 
-        favorite_games = list()
+        favorite_games = []
         for game in guild.preferred_games:
             favorite_games.append(game.clean_name)
         if not favorite_games:
@@ -257,7 +267,7 @@ class HypixelStats(commands.Cog):
             ),
             color=SUCCESS_COLOR,
         )
-        embed.set_footer(text="Помощь — !help")
+        embed.set_footer(text=HELP_FOOTER)
 
         await ctx.send(embed=embed)
 
@@ -275,10 +285,10 @@ class HypixelStats(commands.Cog):
             except HypixelException:
                 embed = Embed(
                     title=ERROR_MESSAGE,
-                    description=(f"Такого игрока не существует"),
+                    description=NO_SUCH_PLAYER_MESSAGE,
                     color=ERROR_COLOR,
                 )
-                embed.set_footer(text="Использование — !bw <никнейм>")
+                embed.set_footer(text=f"Использование — {COMMAND_PREFIX}bw <никнейм>")
                 await ctx.send(embed=embed)
 
         player_uuid = player.uuid
@@ -318,7 +328,7 @@ class HypixelStats(commands.Cog):
             color=SUCCESS_COLOR,
         )
         embed.set_thumbnail(url=create_head(player_uuid))
-        embed.set_footer(text="Помощь — !help")
+        embed.set_footer(text=HELP_FOOTER)
 
         await ctx.send(embed=embed)
 
@@ -336,10 +346,12 @@ class HypixelStats(commands.Cog):
             except HypixelException:
                 embed = Embed(
                     title=ERROR_MESSAGE,
-                    description=(f"Такого игрока не существует"),
+                    description=NO_SUCH_PLAYER_MESSAGE,
                     color=ERROR_COLOR,
                 )
-                embed.set_footer(text="Использование — !duels <никнейм>")
+                embed.set_footer(
+                    text=f"Использование — {COMMAND_PREFIX}duels <никнейм>"
+                )
                 await ctx.send(embed=embed)
 
         player_uuid = player.uuid
@@ -378,7 +390,7 @@ class HypixelStats(commands.Cog):
             color=SUCCESS_COLOR,
         )
         embed.set_thumbnail(url=create_head(player_uuid))
-        embed.set_footer(text="Помощь — !help")
+        embed.set_footer(text=HELP_FOOTER)
 
         await ctx.send(embed=embed)
 
@@ -396,10 +408,12 @@ class HypixelStats(commands.Cog):
             except HypixelException:
                 embed = Embed(
                     title=ERROR_MESSAGE,
-                    description=(f"Такого игрока не существует"),
+                    description=NO_SUCH_PLAYER_MESSAGE,
                     color=ERROR_COLOR,
                 )
-                embed.set_footer(text="Использование — !arcade <никнейм>")
+                embed.set_footer(
+                    text=f"Использование — {COMMAND_PREFIX}arcade <никнейм>"
+                )
                 await ctx.send(embed=embed)
 
         player_uuid = player.uuid
@@ -435,7 +449,7 @@ class HypixelStats(commands.Cog):
             color=SUCCESS_COLOR,
         )
         embed.set_thumbnail(url=create_head(player_uuid))
-        embed.set_footer(text="Помощь — !help")
+        embed.set_footer(text=HELP_FOOTER)
 
         await ctx.send(embed=embed)
 
@@ -453,10 +467,10 @@ class HypixelStats(commands.Cog):
             except HypixelException:
                 embed = Embed(
                     title=ERROR_MESSAGE,
-                    description=(f"Такого игрока не существует"),
+                    description=NO_SUCH_PLAYER_MESSAGE,
                     color=ERROR_COLOR,
                 )
-                embed.set_footer(text="Использование — !tkr <никнейм>")
+                embed.set_footer(text=f"Использование — {COMMAND_PREFIX}tkr <никнейм>")
                 await ctx.send(embed=embed)
 
         player_uuid = player.uuid
@@ -484,7 +498,7 @@ class HypixelStats(commands.Cog):
             color=SUCCESS_COLOR,
         )
         embed.set_thumbnail(url=create_head(player_uuid))
-        embed.set_footer(text="Помощь — !help")
+        embed.set_footer(text=HELP_FOOTER)
 
         await ctx.send(embed=embed)
 
@@ -502,10 +516,12 @@ class HypixelStats(commands.Cog):
             except HypixelException:
                 embed = Embed(
                     title=ERROR_MESSAGE,
-                    description=(f"Такого игрока не существует"),
+                    description=NO_SUCH_PLAYER_MESSAGE,
                     color=ERROR_COLOR,
                 )
-                embed.set_footer(text="Использование — !paintball <никнейм>")
+                embed.set_footer(
+                    text=f"Использование — {COMMAND_PREFIX}paintball <никнейм>"
+                )
                 await ctx.send(embed=embed)
 
         player_uuid = player.uuid
@@ -528,6 +544,6 @@ class HypixelStats(commands.Cog):
             color=SUCCESS_COLOR,
         )
         embed.set_thumbnail(url=create_head(player_uuid))
-        embed.set_footer(text="Помощь — !help")
+        embed.set_footer(text=HELP_FOOTER)
 
         await ctx.send(embed=embed)

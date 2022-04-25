@@ -127,8 +127,6 @@ def start_bot():
         help_command=None,
     )
 
-    bot.remove_command("help")
-
     @bot.command()
     async def help(context):
         embed = discord.Embed(
@@ -141,26 +139,27 @@ def start_bot():
                 f"• `SettingsBot` — бот для настройки\n"
                 f"\n"
                 f"Команды, доступные в StatsBot:\n"
-                f"• `!stats <никнейм>` — основная статистика\n"
-                f"• `!names <никнейм>` — история никнеймов\n"
-                f"• `!socials <никнейм>` — социальные сети\n"
-                f"• `!arcade <никнейм>` — статистика Arcade Games\n"
-                f"• `!bw <никнейм>` — статистика Bed Wars\n"
-                f"• `!duels <никнейм>` — статистика Duels\n"
-                f"• `!paintball <никнейм>` — статистика Paintball\n"
-                f"• `!tkr <никнейм>` — статистика Turbo Kart Racers\n"
-                f"• `!guild <название>` — статистика гильдии\n"
+                f"• `{COMMAND_PREFIX}stats <никнейм>` — основная статистика\n"
+                f"• `{COMMAND_PREFIX}names <никнейм>` — история никнеймов\n"
+                f"• `{COMMAND_PREFIX}socials <никнейм>` — социальные сети\n"
+                f"• `{COMMAND_PREFIX}arcade <никнейм>` — статистика Arcade Games\n"
+                f"• `{COMMAND_PREFIX}bw <никнейм>` — статистика Bed Wars\n"
+                f"• `{COMMAND_PREFIX}duels <никнейм>` — статистика Duels\n"
+                f"• `{COMMAND_PREFIX}paintball <никнейм>` — статистика Paintball\n"
+                f"• `{COMMAND_PREFIX}tkr <никнейм>` — статистика Turbo Kart Racers\n"
+                f"• `{COMMAND_PREFIX}guild <название>` — статистика гильдии\n"
                 f"\n"
                 f"Команды, доступные в MusicBot:\n"
-                f"• `!music` — рандомная музыка из Майнкрафта\n"
-                f"• `!music stats` — статистика музыки\n"
+                f"• `{COMMAND_PREFIX}music` — рандомная музыка из Майнкрафта\n"
+                f"• `{COMMAND_PREFIX}music stats` — статистика музыки\n"
                 f"\n"
                 f"Команды, доступные в NewsBot:\n"
-                f"• `!news` — последние 3 новости\n"
-                f"• `!news <количество>` — последние новости в указанном количестве\n"
+                f"• `{COMMAND_PREFIX}news` — последние 3 новости\n"
+                f"• `{COMMAND_PREFIX}news <количество>` — последние новости в указанном количестве\n"
+                f"• `{COMMAND_PREFIX}news stats` — Статистика по запросу новостей\n"
                 f"\n"
                 f"Команды, доступные в SettingsBot:\n"
-                f"• `!settings` — настройки бота"
+                f"• `{COMMAND_PREFIX}settings` — настройки бота"
             ),
             color=SUCCESS_COLOR,
         )
