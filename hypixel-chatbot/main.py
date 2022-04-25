@@ -133,7 +133,7 @@ def start_bot():
             title="Помощь",
             description=(
                 f"**HypixelBot — универсальный бот для Hypixel**\n"
-                f"• **StatsBot** — бот для статистики игроков Hypixel\n"
+                f"• **StatsBot** — бот для статистики Hypixel\n"
                 f"• **MusicBot** — бот с музыкой из Minecraft\n"
                 f"• **NewsBot** — бот с последними новостями Hypixel\n"
                 f"• **SettingsBot** — бот для настройки\n"
