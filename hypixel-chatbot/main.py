@@ -130,11 +130,11 @@ def start_bot():
     @bot.command()
     async def help(context):
         embed = discord.Embed(
-            title="❓ Помощь",
+            title="Помощь",
             description=(
-                f"**HypixelBot включает в себя четыре части**\n"
+                f"**HypixelBot — универсальный бот для Hypixel**\n"
                 f"• **StatsBot** — бот для статистики игроков Hypixel\n"
-                f"• **MusicBot** — бот с музыкой из Майнкрафта\n"
+                f"• **MusicBot** — бот с музыкой из Minecraft\n"
                 f"• **NewsBot** — бот с последними новостями Hypixel\n"
                 f"• **SettingsBot** — бот для настройки\n"
                 f"\n"
