@@ -1,3 +1,6 @@
+import calendar
+import datetime
+
 from discord.colour import Color
 
 TOKEN = "OTYxNTQ5MTE5OTc1OTk3NDYy.Yk6mZg.CdomTHWPthQYL9tjoiRXs4HKwV8"
@@ -12,3 +15,15 @@ ERROR_MESSAGE = "❌ Ошибка!"
 REGULAR_COLOR = Color.gold()
 SUCCESS_COLOR = Color.green()
 ERROR_COLOR = Color.red()
+
+
+def get_current_month_and_year() -> tuple:
+    current_date = datetime.date.today()
+    month = current_date.month
+    year = current_date.year
+
+    return month, year
+
+
+def num_to_month(num: int):
+    return calendar.month_name[num]
