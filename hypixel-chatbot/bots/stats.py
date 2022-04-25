@@ -56,6 +56,12 @@ class HypixelStats(commands.Cog):
                 await message.edit(embed=embed)
                 return
 
+            try:
+                guild = await client.guild_by_player(nickname)
+                guild_info = f"{guild.name} [{guild.tag}]"
+            except HypixelException:
+                guild_info = "—"
+
         player_uuid = player.uuid
 
         last_login = player.last_login
@@ -86,6 +92,7 @@ class HypixelStats(commands.Cog):
                 f"Карма: {format_number(player.karma)}\n"
                 f"\n"
                 f"Друзья: {format_number(len(friends))}\n"
+                f"Гильдия: {guild_info}\n"
                 f"\n"
                 f"Первый вход: {format_date(player.first_login)}\n"
                 f"Последний вход: {last_login}\n"
@@ -96,6 +103,36 @@ class HypixelStats(commands.Cog):
             color=SUCCESS_COLOR,
         )
         embed.set_thumbnail(url=create_head(player_uuid))
+        embed.set_footer(text=HELP_FOOTER)
+
+        await message.edit(embed=embed)
+
+    @commands.command(name="server")
+    async def get_server(self, ctx: Context, nickname: str = ""):
+        message = await ctx.send(embed=LOADING_EMBED)
+
+        client = hypixel.Client(API_KEY)
+        async with client:
+            try:
+                player_count = await client.player_count()
+                bans = await client.bans()
+            except HypixelException:
+                return
+
+        embed = Embed(
+            title=f"☁️ Статистика сервера",
+            description=(
+                f"Онлайн: {format_number(player_count)}\n"
+                f"\n"
+                f"Статистика банов:\n"
+                f"Watchdog за всё время: {format_number(bans.watchdog_total)}\n"
+                f"Watchdog за день: {format_number(bans.watchdog_day)}\n"
+                f"Watchdog недавние: {format_number(bans.watchdog_recent)}\n"
+                f"Модераторы на всё время: {format_number(bans.staff_total)}\n"
+                f"Модераторы за день: {format_number(bans.staff_day)}"
+            ),
+            color=SUCCESS_COLOR,
+        )
         embed.set_footer(text=HELP_FOOTER)
 
         await message.edit(embed=embed)
@@ -256,7 +293,7 @@ class HypixelStats(commands.Cog):
             favorite_games.append("—")
 
         embed = Embed(
-            title=f"🛡️ Гильдия {guild.name}",
+            title=f"🛡️ Гильдия {guild.name} [{guild.tag}]",
             description=(
                 f"Название: {guild.name}\n"
                 f"Тэг: [{guild.tag}]\n"
