@@ -1,11 +1,11 @@
 import calendar
 import datetime
 
-from discord.colour import Color
 from discord import Embed
+from discord.colour import Color
 
-TOKEN = ""
-API_KEY = ""
+TOKEN = "OTYxNTQ5MTE5OTc1OTk3NDYy.Yk6mZg.0tfCGBWqQOexPFYwOgKTOfnw7h4"
+API_KEY = "81861188-cb9c-4392-a938-f5ca499e81a3"
 DATABASE_PATH = "database/database.db"
 
 # Colors

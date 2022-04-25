@@ -175,12 +175,12 @@ def start_bot():
 
 
 def main():
+    setup_db()
     setup_logging()
     start_bot()
 
 
 if __name__ == "__main__":
     session = create_session()
-    setup_db()
 
     main()
