@@ -4,8 +4,8 @@ import datetime
 from discord.colour import Color
 from discord import Embed
 
-TOKEN = "OTYxNTQ5MTE5OTc1OTk3NDYy.Yk6mZg.CdomTHWPthQYL9tjoiRXs4HKwV8"
-API_KEY = "81861188-cb9c-4392-a938-f5ca499e81a3"
+TOKEN = ""
+API_KEY = ""
 DATABASE_PATH = "database/database.db"
 
 # Colors
