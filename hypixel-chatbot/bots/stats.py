@@ -240,12 +240,17 @@ class HypixelStats(commands.Cog):
             )
             embed.set_footer(text=f"Использование — {COMMAND_PREFIX}guild <название>")
             await message.edit(embed=embed)
+            return
+
         guild_name = guild_name.lower()
 
         client = hypixel.Client(API_KEY)
         async with client:
             try:
                 guild = await client.guild_by_name(guild_name)
+                guild_master = await client.player(
+                    get_player_by_uuid(guild.members[0].uuid)
+                )
             except HypixelException:
                 embed = Embed(
                     title=ERROR_MESSAGE,
@@ -261,6 +266,24 @@ class HypixelStats(commands.Cog):
         description = guild.description
         if not description:
             description = "—"
+
+        guild_tag = guild.tag
+        if not guild_tag:
+            guild_tag = "—"
+        else:
+            guild_tag = f"[{guild.tag}]"
+
+        guild_tag_title = guild.tag
+        if not guild_tag_title:
+            guild_tag_title = ""
+        else:
+            guild_tag_title = f"[{guild.tag}]"
+
+        guild_master_rank = guild_master.rank
+        if not guild_master_rank:
+            guild_master_rank = ""
+        else:
+            guild_master_rank = f"[{guild_master.rank}]"
 
         tag_color = guild.tag_color
         if not tag_color:
@@ -293,23 +316,22 @@ class HypixelStats(commands.Cog):
             favorite_games.append("—")
 
         embed = Embed(
-            title=f"🛡️ Гильдия {guild.name} [{guild.tag}]",
+            title=f"🛡️ Гильдия {guild.name} {guild_tag_title}",
             description=(
                 f"Название: {guild.name}\n"
-                f"Тэг: [{guild.tag}]\n"
+                f"Тэг: {guild_tag}\n"
                 f"Цвет тэга: {tag_color}\n"
                 f"\n"
-                f"Описание: {description}\n"
+                f"Описание:\n{description}\n"
                 f"\n"
                 f"Уровень: {format_number(floor_number(guild.level))}"
                 f"\n"
-                f"Глава гильдии: {get_player_by_uuid(guild.members[0].uuid)}\n"
+                f"Глава гильдии: {guild_master_rank} {guild_master.name}\n"
                 f"Участники: {format_number(len(guild.members))}\n"
                 f"\n"
                 f"Создана: {format_date(guild.created)}\n"
                 f"\n"
-                f"Опыт гильдии:\n"
-                f"Всего: {format_number(guild.exp)}\n"
+                f"Опыт гильдии: {format_number(guild.exp)}\n"
                 f"\n"
                 f"Публичная: {publically_listed}\n"
                 f"Открытая: {joinable}\n"
@@ -483,8 +505,6 @@ class HypixelStats(commands.Cog):
                 f"Hypixel Says:\n"
                 f"Игр сыграно: {format_number(player.arcade.hypixel_says.rounds)}\n"
                 f"Победы: {format_number(player.arcade.hypixel_says.wins)}\n"
-                f"Проигрыши: {format_number(player.arcade.hypixel_says.losses)}\n"
-                f"W/L: {format_number(player.arcade.hypixel_says.wlr)}\n"
                 f"\n"
                 f"Победы Party Games: {format_number(player.arcade.party_games.total_wins)}\n"
                 f"\n"
@@ -548,7 +568,7 @@ class HypixelStats(commands.Cog):
                 f"\n"
                 f"Удары банановой шкуркой: {format_number(player.tkr.banana_hits)}\n"
                 f"Наезды на банановую шкурку: {format_number(player.tkr.bananas_received)}\n"
-                f"H/R: {format_number(player.tkr.br)}"
+                f"H/R: {format_number(player.tkr.br)}\n"
                 f"\n"
                 f"Удары синей торпедой: {format_number(player.tkr.blue_torpedo_hits)}\n"
                 f"\n"
