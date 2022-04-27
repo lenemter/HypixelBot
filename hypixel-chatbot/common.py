@@ -4,8 +4,8 @@ import datetime
 from discord import Embed
 from discord.colour import Color
 
-TOKEN = ""  # Discord Bot token — https://discord.com/developers
-API_KEY = ""  # Hypixel Public API key — /api new on the Hypixel Network @ https://hypixel.net/
+TOKEN = "OTYxNTQ5MTE5OTc1OTk3NDYy.Yk6mZg.yR1lBK_Rh0iS4_BZ6rGtIBQSv4A"  # Discord Bot token — https://discord.com/developers
+API_KEY = "47d3cb53-6674-4652-9d19-bbc73e3b989b"  # Hypixel Public API key — /api new on the Hypixel Network @ https://hypixel.net/
 DATABASE_PATH = "database/database.db"
 
 # Colors
