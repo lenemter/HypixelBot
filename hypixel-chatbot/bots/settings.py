@@ -1,4 +1,4 @@
-from common import COMMAND_PREFIX, REGULAR_COLOR, SUCCESS_COLOR, LOADING_EMBED
+from common import COMMAND_PREFIX, LOADING_EMBED, REGULAR_COLOR, SUCCESS_COLOR
 from database.__all_models import ChatNotifier
 from database.db_session import create_session
 from discord import Embed

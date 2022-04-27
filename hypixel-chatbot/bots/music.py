@@ -6,7 +6,6 @@ from pathlib import Path
 from common import (
     COMMAND_PREFIX,
     LOADING_EMBED,
-    REGULAR_COLOR,
     SUCCESS_COLOR,
     get_current_month_and_year,
 )

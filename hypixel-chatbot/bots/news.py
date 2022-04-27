@@ -1,11 +1,9 @@
 from common import (
-    LOADING_EMBED,
     COMMAND_PREFIX,
     ERROR_COLOR,
     ERROR_MESSAGE,
-    REGULAR_COLOR,
+    LOADING_EMBED,
     SUCCESS_COLOR,
-    WAIT_MESSAGE,
     get_current_month_and_year,
     num_to_month,
 )
