@@ -23,6 +23,14 @@ def create_head(uuid):
     return f"https://crafatar.com/renders/head/{uuid}?overlay"
 
 
+def create_skin(uuid):
+    return f"https://crafatar.com/renders/body/{uuid}?overlay"
+
+
+def create_avatar(uuid):
+    return f"https://crafatar.com/avatars/{uuid}?overlay"
+
+
 def get_player_by_uuid(uuid):
     request = requests.get(
         "https://api.mojang.com/user/profiles/%s/names" % uuid

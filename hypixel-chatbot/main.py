@@ -149,6 +149,7 @@ def start_bot():
                 f"• `{COMMAND_PREFIX}tkr <никнейм>` — статистика Turbo Kart Racers\n"
                 f"• `{COMMAND_PREFIX}guild <название>` — статистика гильдии\n"
                 f"• `{COMMAND_PREFIX}server` — статистика сервера\n"
+                f"• `{COMMAND_PREFIX}skin <никнейм>` — скин игрока\n"
                 f"\n"
                 f"Команды, доступные в **MusicBot**\n"
                 f"• `{COMMAND_PREFIX}music` — рандомная музыка из Майнкрафта\n"

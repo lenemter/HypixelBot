@@ -12,7 +12,9 @@ from discord.ext import commands
 from discord.ext.commands.context import Context
 from hypixel import HypixelException
 from stats_utils import (
+    create_avatar,
     create_head,
+    create_skin,
     floor_number,
     format_date,
     format_number,
@@ -82,8 +84,14 @@ class HypixelStats(commands.Cog):
         else:
             status = "Оффлайн"
 
+        player_rank_title = player.rank
+        if player_rank_title:
+            player_rank_title = f"[{player.rank}]"
+        else:
+            player_rank_title = ""
+
         embed = Embed(
-            title=f"📊 Статистика {player.name}",
+            title=f"{player_rank_title} {player.name}",
             description=(
                 f"Ранг: {player.rank}\n"
                 f"\n"
@@ -102,8 +110,48 @@ class HypixelStats(commands.Cog):
             ),
             color=SUCCESS_COLOR,
         )
+
         embed.set_thumbnail(url=create_head(player_uuid))
         embed.set_footer(text=HELP_FOOTER)
+        embed.set_author(
+            name=f"Статистика {player.name}", icon_url=create_avatar(player_uuid)
+        )
+
+        await message.edit(embed=embed)
+
+    @commands.command(name="skin")
+    async def get_skin(self, ctx: Context, nickname: str = ""):
+        message = await ctx.send(embed=LOADING_EMBED)
+
+        if not nickname:
+            nickname = ctx.message.author.name
+        nickname = nickname.lower()
+
+        client = hypixel.Client(API_KEY)
+        async with client:
+            try:
+                player = await client.player(nickname)
+            except HypixelException:
+                embed = Embed(
+                    title=ERROR_MESSAGE,
+                    description=NO_SUCH_PLAYER_MESSAGE,
+                    color=ERROR_COLOR,
+                )
+                embed.set_footer(text=f"Использование — {COMMAND_PREFIX}skin <никнейм>")
+                await message.edit(embed=embed)
+                return
+
+        player_uuid = player.uuid
+
+        embed = Embed(
+            color=SUCCESS_COLOR,
+        )
+
+        embed.set_image(url=create_skin(player_uuid))
+        embed.set_footer(text=HELP_FOOTER)
+        embed.set_author(
+            name=f"Скин {player.name}", icon_url=create_avatar(player_uuid)
+        )
 
         await message.edit(embed=embed)
 
@@ -120,7 +168,7 @@ class HypixelStats(commands.Cog):
                 return
 
         embed = Embed(
-            title=f"☁️ Статистика сервера",
+            title=f"Hypixel Network — mc.hypixel.net",
             description=(
                 f"Онлайн: {format_number(player_count)}\n"
                 f"\n"
@@ -133,7 +181,12 @@ class HypixelStats(commands.Cog):
             ),
             color=SUCCESS_COLOR,
         )
+
         embed.set_footer(text=HELP_FOOTER)
+        embed.set_author(
+            name=f"Статистика сервера",
+            icon_url="https://dl.labymod.net/img/server/hypixel/icon@2x.webp",
+        )
 
         await message.edit(embed=embed)
 
@@ -167,14 +220,18 @@ class HypixelStats(commands.Cog):
         names.reverse()
 
         embed = Embed(
-            title=f"📝 История никнеймов {player.name}",
+            title=f"{player.name}",
             description=(
                 "\n".join((f"{names.index(name) + 1}. {name}" for name in names))
             ),
             color=SUCCESS_COLOR,
         )
+
         embed.set_thumbnail(url=create_head(player_uuid))
         embed.set_footer(text=HELP_FOOTER)
+        embed.set_author(
+            name=f"История никнеймов {player.name}", icon_url=create_avatar(player_uuid)
+        )
 
         await message.edit(embed=embed)
 
@@ -218,13 +275,23 @@ class HypixelStats(commands.Cog):
         if not message_content:
             message_content = "Социальные сети не указаны"
 
+        player_rank_title = player.rank
+        if player_rank_title:
+            player_rank_title = f"[{player.rank}]"
+        else:
+            player_rank_title = ""
+
         embed = Embed(
-            title=f"📱 Социальные сети {player.name}",
+            title=f"{player_rank_title} {player.name}",
             description=message_content,
             color=SUCCESS_COLOR,
         )
+
         embed.set_thumbnail(url=create_head(player_uuid))
         embed.set_footer(text=HELP_FOOTER)
+        embed.set_author(
+            name=f"Социальные сети {player.name}", icon_url=create_avatar(player_uuid)
+        )
 
         await message.edit(embed=embed)
 
@@ -316,7 +383,7 @@ class HypixelStats(commands.Cog):
             favorite_games.append("—")
 
         embed = Embed(
-            title=f"🛡️ Гильдия {guild.name} {guild_tag_title}",
+            title=f"{guild.name} {guild_tag_title}",
             description=(
                 f"Название: {guild.name}\n"
                 f"Тэг: {guild_tag}\n"
@@ -340,7 +407,12 @@ class HypixelStats(commands.Cog):
             ),
             color=SUCCESS_COLOR,
         )
+
         embed.set_footer(text=HELP_FOOTER)
+        embed.set_author(
+            name=f"Гильдия {guild.name} {guild_tag_title}",
+            icon_url="https://dl.labymod.net/img/server/hypixel/icon@2x.webp",
+        )
 
         await message.edit(embed=embed)
 
@@ -373,8 +445,14 @@ class HypixelStats(commands.Cog):
         else:
             player_bedwars_winstreak = player.bedwars.winstreak
 
+        player_rank_title = player.rank
+        if player_rank_title:
+            player_rank_title = f"[{player.rank}]"
+        else:
+            player_rank_title = ""
+
         embed = Embed(
-            title=f"🛏 Bed Wars статистика {player.name}",
+            title=f"{player_rank_title} {player.name}",
             description=(
                 f"Уровень: {format_number(player.bedwars.level)}✫\n"
                 f"\n"
@@ -402,8 +480,13 @@ class HypixelStats(commands.Cog):
             ),
             color=SUCCESS_COLOR,
         )
+
         embed.set_thumbnail(url=create_head(player_uuid))
         embed.set_footer(text=HELP_FOOTER)
+        embed.set_author(
+            name=f"Bed Wars статистика {player.name}",
+            icon_url=create_avatar(player_uuid),
+        )
 
         await message.edit(embed=embed)
 
@@ -443,8 +526,14 @@ class HypixelStats(commands.Cog):
             player.duels.arrows_hit / player.duels.arrows_shot
         )
 
+        player_rank_title = player.rank
+        if player_rank_title:
+            player_rank_title = f"[{player.rank}]"
+        else:
+            player_rank_title = ""
+
         embed = Embed(
-            title=f"⚔️ Duels статистика {player.name}",
+            title=f"{player_rank_title} {player.name}",
             description=(
                 f"Киллы: {format_number(player.duels.kills)}\n"
                 f"Смерти: {format_number(player.duels.deaths)}\n"
@@ -466,8 +555,12 @@ class HypixelStats(commands.Cog):
             ),
             color=SUCCESS_COLOR,
         )
+
         embed.set_thumbnail(url=create_head(player_uuid))
         embed.set_footer(text=HELP_FOOTER)
+        embed.set_author(
+            name=f"Duels статистика {player.name}", icon_url=create_avatar(player_uuid)
+        )
 
         await message.edit(embed=embed)
 
@@ -497,8 +590,14 @@ class HypixelStats(commands.Cog):
 
         player_uuid = player.uuid
 
+        player_rank_title = player.rank
+        if player_rank_title:
+            player_rank_title = f"[{player.rank}]"
+        else:
+            player_rank_title = ""
+
         embed = Embed(
-            title=f"🎮 Arcade статистика {player.name}",
+            title=f"{player_rank_title} {player.name}",
             description=(
                 f"Монеты: {format_number(player.arcade.coins)}\n"
                 f"\n"
@@ -525,8 +624,13 @@ class HypixelStats(commands.Cog):
             ),
             color=SUCCESS_COLOR,
         )
+
         embed.set_thumbnail(url=create_head(player_uuid))
         embed.set_footer(text=HELP_FOOTER)
+        embed.set_author(
+            name=f"Arcade Games статистика {player.name}",
+            icon_url=create_avatar(player_uuid),
+        )
 
         await message.edit(embed=embed)
 
@@ -554,8 +658,14 @@ class HypixelStats(commands.Cog):
 
         player_uuid = player.uuid
 
+        player_rank_title = player.rank
+        if player_rank_title:
+            player_rank_title = f"[{player.rank}]"
+        else:
+            player_rank_title = ""
+
         embed = Embed(
-            title=f"🏎️ Turbo Kart Racers статистика {player.name}",
+            title=f"{player_rank_title} {player.name}",
             description=(
                 f"Победы: {format_number(player.tkr.wins)}\n"
                 f"\n"
@@ -576,8 +686,13 @@ class HypixelStats(commands.Cog):
             ),
             color=SUCCESS_COLOR,
         )
+
         embed.set_thumbnail(url=create_head(player_uuid))
         embed.set_footer(text=HELP_FOOTER)
+        embed.set_author(
+            name=f"Turbo Kart Racers статистика {player.name}",
+            icon_url=create_avatar(player_uuid),
+        )
 
         await message.edit(embed=embed)
 
@@ -607,8 +722,14 @@ class HypixelStats(commands.Cog):
 
         player_uuid = player.uuid
 
+        player_rank_title = player.rank
+        if player_rank_title:
+            player_rank_title = f"[{player.rank}]"
+        else:
+            player_rank_title = ""
+
         embed = Embed(
-            title=f"⚽ Paintball статистика {player.name}",
+            title=f"{player_rank_title} {player.name}",
             description=(
                 f"Победы: {format_number(player.paintball.wins)}\n"
                 f"\n"
@@ -624,7 +745,12 @@ class HypixelStats(commands.Cog):
             ),
             color=SUCCESS_COLOR,
         )
+
         embed.set_thumbnail(url=create_head(player_uuid))
         embed.set_footer(text=HELP_FOOTER)
+        embed.set_author(
+            name=f"Paintball статистика {player.name}",
+            icon_url=create_avatar(player_uuid),
+        )
 
         await message.edit(embed=embed)
