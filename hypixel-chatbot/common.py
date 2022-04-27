@@ -28,6 +28,7 @@ LOADING_EMBED = Embed(
 
 
 def get_current_month_and_year() -> tuple:
+    """Возвращает текущий месяц и год"""
     current_date = datetime.date.today()
     month = current_date.month
     year = current_date.year
@@ -36,4 +37,5 @@ def get_current_month_and_year() -> tuple:
 
 
 def num_to_month(num: int):
+    """Возвращает название месяца по его числу"""
     return calendar.month_name[num]

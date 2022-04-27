@@ -18,7 +18,7 @@ session = create_session()
 
 
 def get_news_stats(user_id: int, month, year) -> NewsStats:
-    """Gets news_stats by params, if result is None, new music object will be created automatically"""
+    """Возвращает статистику новостей из БД по параметрам, если ничего не найдено, то новая запись в БД создаётся автоматически"""
     news_stats = (
         session.query(NewsStats)
         .filter(
@@ -38,6 +38,7 @@ def get_news_stats(user_id: int, month, year) -> NewsStats:
 
 
 def count_request(user_id: int, count: int) -> None:
+    """Записывает статистику"""
     news_request = NewsRequest(user_id=user_id, count=count)
     session.add(news_request)
 
@@ -72,6 +73,7 @@ def count_request(user_id: int, count: int) -> None:
 
 
 def is_num(string: str) -> bool:
+    """Проверка на число"""
     try:
         int(string)
         return True
@@ -80,6 +82,7 @@ def is_num(string: str) -> bool:
 
 
 def generate_stats_description(news_stats) -> str:
+    """Генерирует описания"""
     count = news_stats.count
     count_str = f"Количество: {count}"
 
@@ -94,6 +97,7 @@ class NewsBot(commands.Cog):
 
     @commands.command(name="news")
     async def news(self, ctx: Context, count: str = "3", confirmation: bool = False):
+        """!news <количество>"""
         if count == "stats":
             await self.stats(ctx)
         elif is_num(count):
@@ -144,6 +148,7 @@ class NewsBot(commands.Cog):
             await message.edit(embed=embed)
 
     async def stats(self, ctx: Context):
+        """!news stats"""
         message = await ctx.send(embed=LOADING_EMBED)
 
         user_id = ctx.author.id

@@ -31,7 +31,7 @@ MUSIC_STATS_TITLES = [
 
 
 def get_music_stats(user_id: int, title: str, month, year) -> MusicStats:
-    """Gets music_stats by params, if result is None, new music object will be created automatically"""
+    """Возвращает статистику музыки из БД по параметрам, если ничего не найдено, то новая запись в БД создаётся автоматически"""
     music_stats = (
         session.query(MusicStats)
         .filter(
@@ -52,6 +52,7 @@ def get_music_stats(user_id: int, title: str, month, year) -> MusicStats:
 
 
 def get_user_music_stats(user_id: int, month, year) -> list:
+    """Возвращает список музыки, прослушанной пользователем"""
     query = (
         session.query(MusicStats)
         .filter(
@@ -66,6 +67,7 @@ def get_user_music_stats(user_id: int, month, year) -> list:
 
 
 def pump_stats(user_id: int, music_title: str) -> None:
+    """Записывает статистику"""
     music_request = MusicRequest(user_id=user_id, title=music_title)
     session.add(music_request)
 
@@ -104,6 +106,7 @@ def pump_stats(user_id: int, music_title: str) -> None:
 
 
 def generate_stats_description(music_query):
+    """Генерирует описания для статистики"""
     count = sum((song.count for song in music_query))
     count_str = f"Количество: {count}"
     top_3_title = f"Топ {min(count, 3)}:" if count else ""
@@ -120,6 +123,7 @@ class MusicBot(commands.Cog):
 
     @commands.group(name="music")
     async def music(self, ctx: Context):
+        """!music"""
         if ctx.invoked_subcommand is None:
             message = await ctx.send(embed=LOADING_EMBED)
 
@@ -142,6 +146,7 @@ class MusicBot(commands.Cog):
 
     @music.command()
     async def stats(self, ctx: Context):
+        """!music stats"""
         message = await ctx.send(embed=LOADING_EMBED)
 
         user_id = ctx.author.id

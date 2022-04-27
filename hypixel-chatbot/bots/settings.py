@@ -9,6 +9,7 @@ session = create_session()
 
 
 def get_chat_notifier(channel_id: int):
+    """Возварает оповещение из БД"""
     chat_notifier = (
         session.query(ChatNotifier)
         .filter(ChatNotifier.channel_id == channel_id)
@@ -19,6 +20,7 @@ def get_chat_notifier(channel_id: int):
 
 
 def bool_to_message(status: bool) -> str:
+    """bool -> сообщение Включено или Выключено"""
     return "Включено" if status else "Выключено"
 
 
@@ -40,6 +42,7 @@ def add_field_notification(embed: Embed, channel_id: int) -> Embed:
 
 
 def toggle_notifier(user_id: int, channel_id: int) -> None:
+    """Изменяет состояние оповещения"""
     chat_notifier = get_chat_notifier(channel_id)
 
     if chat_notifier is None:
@@ -59,6 +62,7 @@ class SettingsBot(commands.Cog):
 
     @commands.group(name="settings")
     async def settings(self, ctx: Context):
+        """!settings"""
         if ctx.invoked_subcommand is None:
             channel_id = ctx.channel.id
 
@@ -73,6 +77,7 @@ class SettingsBot(commands.Cog):
 
     @settings.command()
     async def notification(self, ctx: Context):
+        """!settings notification"""
         user_id = ctx.author.id
         channel_id = ctx.channel.id
 

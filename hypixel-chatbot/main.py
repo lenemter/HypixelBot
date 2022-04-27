@@ -38,8 +38,8 @@ OFFLINE_MESSAGES = [
 ]
 
 
-def setup_db():
-    # Добавляет юзера с id -1 в бд
+def setup_db() -> None:
+    # Добавляет пользователя с id -1 в БД
     no_user_id = -1
     user = session.query(User).filter(User.id == no_user_id).first()
     if not user:
@@ -49,6 +49,7 @@ def setup_db():
 
 
 def register_user(user_id: int) -> None:
+    """Добавляет ползователя в БД"""
     user = session.query(User).filter(User.id == user_id).first()
     if not user:
         user = User(id=user_id)
@@ -67,6 +68,7 @@ class HypixelBot(commands.Bot):
         return await super().on_message(message)
 
     async def on_ready(self):
+        """При запуске бота, бот отправляет рандомное сообщение о запуске"""
         chat_notifiers = session.query(ChatNotifier)
         for chat_notifier in chat_notifiers:
             channel_id = chat_notifier.channel_id
@@ -79,6 +81,7 @@ class HypixelBot(commands.Bot):
             await channel.send(embed=embed)
 
     async def close(self):
+        """При отключении бота, бот отправляет рандомное сообщение о выключении"""
         chat_notifiers = session.query(ChatNotifier)
         for chat_notifier in chat_notifiers:
             channel_id = chat_notifier.channel_id
@@ -93,6 +96,7 @@ class HypixelBot(commands.Bot):
         return await super().close()
 
     async def on_command_error(self, context, exception):
+        """Ошибка о неизвестной команде"""
         if isinstance(exception, commands.CommandNotFound):
             embed = discord.Embed(
                 title=ERROR_MESSAGE,
@@ -103,6 +107,7 @@ class HypixelBot(commands.Bot):
 
 
 def setup_logging():
+    """Настройки логирования"""
     logger = logging.getLogger("discord")
     logger.setLevel(logging.WARNING)
     handler = logging.StreamHandler()
@@ -113,6 +118,7 @@ def setup_logging():
 
 
 def start_bot():
+    """Запуск бота"""
     intents = discord.Intents.default()
     intents.members = True
 
