@@ -25,7 +25,7 @@ from bots.news import NewsBot
 from bots.settings import SettingsBot
 from bots.stats import HypixelStats
 
-locale.setlocale(locale.LC_ALL, "ru_RU")
+locale.setlocale(locale.LC_ALL, "ru_RU.utf8")
 
 
 ONLINE_MESSAGES = [
