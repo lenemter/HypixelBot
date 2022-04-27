@@ -1,7 +1,7 @@
-# Hypixel Discord Chatbot
+# HypixelBot
 
-**HypixelBot — универсальный бот для Hypixel**
-* **StatsBot** — бот со статистикой Hypixel
-* **NewsBot** — бот с новостями Hypixel
-* **MusicBot** — бот с музыкой Minecraft
+**HypixelBot — универсальный Discord бот для Hypixel Network и Minecraft.**
+* **StatsBot** — бот со статистикой на Hypixel Network
+* **NewsBot** — бот с новостями Hypixel с форумов
+* **MusicBot** — бот с музыкой из Minecraft
 * **SettingsBot** — бот с настройками
