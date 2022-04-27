@@ -1,4 +1,3 @@
-import calendar
 import datetime
 
 from discord import Embed
@@ -38,4 +37,18 @@ def get_current_month_and_year() -> tuple:
 
 def num_to_month(num: int):
     """Возвращает название месяца по его числу"""
-    return calendar.month_name[num]
+    month_name = {
+        1: "Январь",
+        2: "Февраль",
+        3: "Март",
+        4: "Апрель",
+        5: "Май",
+        6: "Июнь",
+        7: "Июль",
+        8: "Август",
+        9: "Сентябрь",
+        10: "Октябрь",
+        11: "Ноябрь",
+        12: "Декабрь",
+    }
+    return month_name[num]
