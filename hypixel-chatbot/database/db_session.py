@@ -11,6 +11,7 @@ __factory = None
 
 
 def global_init(db_file) -> None:
+    """Инициализирует БД"""
     global __factory
 
     if __factory:
@@ -37,5 +38,6 @@ def global_init(db_file) -> None:
 
 
 def create_session() -> sqlalchemy.orm.Session:
+    """Создаёт сессию в БД"""
     global __factory
     return __factory()

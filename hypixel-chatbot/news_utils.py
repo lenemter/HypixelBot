@@ -11,6 +11,7 @@ LINK_REGEX = re.compile("^\/threads\/")
 
 
 def get_news(count: int = 10):
+    """Парсит hypixel.net и возвращает ссылки на новости"""
     result_links = []
 
     current_page = 1
