@@ -34,6 +34,14 @@ class HypixelStats(commands.Cog):
 
     @commands.command(name="stats")
     async def get_stats(self, ctx: Context, nickname: str = ""):
+
+        """
+        Команда !stats.
+        Отправляет основную статистику игрока на Hypixel Network.
+        Взаимодействует с Hypixel Public API через библиотеку hypixel.py.
+        Также взаимодействует с Crafatar API через отдельную функцию для получения аватарки и модели головы скина игрока.
+        """
+
         message = await ctx.send(embed=LOADING_EMBED)
 
         if not nickname:
@@ -121,6 +129,13 @@ class HypixelStats(commands.Cog):
 
     @commands.command(name="skin")
     async def get_skin(self, ctx: Context, nickname: str = ""):
+
+        """
+        Команда !skin.
+        Отправляет рендер скина игрока.
+        Взаимодействует с Crafatar API через отдельную функцию для получения скина игрока.
+        """
+
         message = await ctx.send(embed=LOADING_EMBED)
 
         if not nickname:
@@ -157,6 +172,13 @@ class HypixelStats(commands.Cog):
 
     @commands.command(name="server")
     async def get_server(self, ctx: Context, nickname: str = ""):
+
+        """
+        Команда !server.
+        Отправляет статистику сервера Hypixel Network.
+        Взаимодействует с Hypixel Public API через библиотеку hypixel.py.
+        """
+
         message = await ctx.send(embed=LOADING_EMBED)
 
         client = hypixel.Client(API_KEY)
@@ -192,6 +214,14 @@ class HypixelStats(commands.Cog):
 
     @commands.command(name="names")
     async def get_names(self, ctx: Context, nickname: str = ""):
+
+        """
+        Команда !names.
+        Отправляет историю никнеймов игрока.
+        Взаимодействует с Hypixel Public API через библиотеку hypixel.py.
+        Также взаимодействует с Crafatar API через отдельную функцию для получения аватарки и модели головы скина игрока.
+        """
+
         message = await ctx.send(embed=LOADING_EMBED)
 
         if not nickname:
@@ -237,6 +267,14 @@ class HypixelStats(commands.Cog):
 
     @commands.command(name="socials")
     async def get_socials(self, ctx: Context, nickname: str = ""):
+
+        """
+        Команда !socials.
+        Отправляет социальные сети игрока, привязанные к Hypixel Network.
+        Взаимодействует с Hypixel Public API через библиотеку hypixel.py.
+        Также взаимодействует с Crafatar API через отдельную функцию для получения аватарки и модели головы скина игрока.
+        """
+
         message = await ctx.send(embed=LOADING_EMBED)
 
         if not nickname:
@@ -297,6 +335,13 @@ class HypixelStats(commands.Cog):
 
     @commands.command(name="guild")
     async def get_guild(self, ctx: Context, guild_name: str = ""):
+
+        """
+        Команда !guild.
+        Отправляет статистику гильдии на Hypixel Network.
+        Взаимодействует с Hypixel Public API через библиотеку hypixel.py.
+        """
+
         message = await ctx.send(embed=LOADING_EMBED)
 
         if not guild_name:
@@ -418,6 +463,14 @@ class HypixelStats(commands.Cog):
 
     @commands.command(name="bw")
     async def get_bw(self, ctx: Context, nickname: str = ""):
+
+        """
+        Команда !bw.
+        Отправляет статистику игрока в миниигре Bed Wars на Hypixel Network.
+        Взаимодействует с Hypixel Public API через библиотеку hypixel.py.
+        Также взаимодействует с Crafatar API через отдельную функцию для получения аватарки и модели головы скина игрока.
+        """
+
         message = await ctx.send(embed=LOADING_EMBED)
 
         if not nickname:
@@ -492,6 +545,14 @@ class HypixelStats(commands.Cog):
 
     @commands.command(name="duels")
     async def get_duels(self, ctx: Context, nickname: str = ""):
+
+        """
+        Команда !duels.
+        Отправляет статистику игрока в миниигре Duels на Hypixel Network.
+        Взаимодействует с Hypixel Public API через библиотеку hypixel.py.
+        Также взаимодействует с Crafatar API через отдельную функцию для получения аватарки и модели головы скина игрока.
+        """
+
         message = await ctx.send(embed=LOADING_EMBED)
 
         if not nickname:
@@ -566,6 +627,14 @@ class HypixelStats(commands.Cog):
 
     @commands.command(name="arcade")
     async def get_arcade(self, ctx: Context, nickname: str = ""):
+
+        """
+        Команда !arcade.
+        Отправляет статистику игрока в миниигре Arcade Games на Hypixel Network.
+        Взаимодействует с Hypixel Public API через библиотеку hypixel.py.
+        Также взаимодействует с Crafatar API через отдельную функцию для получения аватарки и модели головы скина игрока.
+        """
+
         message = await ctx.send(embed=LOADING_EMBED)
 
         if not nickname:
@@ -636,6 +705,14 @@ class HypixelStats(commands.Cog):
 
     @commands.command(name="tkr")
     async def get_tkr(self, ctx: Context, nickname: str = ""):
+
+        """
+        Команда !tkr.
+        Отправляет статистику игрока в миниигре Turbo Kart Racers на Hypixel Network.
+        Взаимодействует с Hypixel Public API через библиотеку hypixel.py.
+        Также взаимодействует с Crafatar API через отдельную функцию для получения аватарки и модели головы скина игрока.
+        """
+
         message = await ctx.send(embed=LOADING_EMBED)
 
         if not nickname:
@@ -698,6 +775,14 @@ class HypixelStats(commands.Cog):
 
     @commands.command(name="paintball")
     async def get_paintball(self, ctx: Context, nickname: str = ""):
+
+        """
+        Команда !paintball.
+        Отправляет статистику игрока в миниигре Paintball на Hypixel Network.
+        Взаимодействует с Hypixel Public API через библиотеку hypixel.py.
+        Также взаимодействует с Crafatar API через отдельную функцию для получения аватарки и модели головы скина игрока.
+        """
+
         message = await ctx.send(embed=LOADING_EMBED)
 
         if not nickname:
