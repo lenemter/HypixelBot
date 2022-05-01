@@ -8,6 +8,7 @@ from common import (
     LOADING_EMBED,
     SUCCESS_COLOR,
     get_current_month_and_year,
+    num_to_month,
 )
 from database.__all_models import MusicRequest, MusicStats
 from database.db_session import create_session
@@ -151,7 +152,7 @@ class MusicBot(commands.Cog):
 
         user_id = ctx.author.id
         month, year = get_current_month_and_year()
-        month_name = calendar.month_name[month]
+        month_name = num_to_month(month)
 
         user_song_all = get_user_music_stats(user_id=user_id, month=None, year=None)
         user_song_month = get_user_music_stats(user_id=user_id, month=month, year=year)

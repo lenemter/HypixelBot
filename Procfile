@@ -1,0 +1,1 @@
+worker: python hypixel-chatbot/main.py
