@@ -1,1 +1,1 @@
-worker: python hypixel-chatbot/main.py
+worker: python HypixelBot/main.py
