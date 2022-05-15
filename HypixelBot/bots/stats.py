@@ -577,14 +577,16 @@ class HypixelStats(commands.Cog):
 
         player_uuid = player.uuid
 
-        player_duels_kdr = round_number(player.duels.kills / player.duels.deaths)
+        player_duels_kdr = round_number(
+            player.duels.kills / max(player.duels.deaths, 1)
+        )
 
         player_duels_mhmr = round_number(
-            player.duels.melee_hits / player.duels.melee_swings
+            player.duels.melee_hits / max(player.duels.melee_swings, 1)
         )
 
         player_duels_bhmr = round_number(
-            player.duels.arrows_hit / player.duels.arrows_shot
+            player.duels.arrows_hit / max(player.duels.arrows_shot, 1)
         )
 
         player_rank_title = player.rank
@@ -622,7 +624,6 @@ class HypixelStats(commands.Cog):
         embed.set_author(
             name=f"Duels статистика {player.name}", icon_url=create_avatar(player_uuid)
         )
-
         await message.edit(embed=embed)
 
     @commands.command(name="arcade")
