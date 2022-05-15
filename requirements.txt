@@ -1,0 +1,7 @@
+bs4
+discord.py
+flask
+gunicorn
+hypixel.py[speed]
+requests
+sqlalchemy
