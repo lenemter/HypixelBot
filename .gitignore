@@ -1,6 +1,8 @@
 .vscode/
-*.__pycache__/
 database/*
+TOKEN.txt
+API_KEY.txt
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

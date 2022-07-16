@@ -1,4 +1,5 @@
 import math
+import time
 
 import requests
 
@@ -49,7 +50,7 @@ def create_head(uuid):
     Функция для создания рендера головы скина игрока.
     """
 
-    return f"https://crafatar.com/renders/head/{uuid}?overlay"
+    return f"https://crafatar.com/renders/head/{uuid}?overlay?{time.time()}"
 
 
 def create_skin(uuid):
@@ -58,7 +59,7 @@ def create_skin(uuid):
     Функция для создания рендера скины игрока.
     """
 
-    return f"https://crafatar.com/renders/body/{uuid}?overlay"
+    return f"https://crafatar.com/renders/body/{uuid}?overlay?{time.time()}"
 
 
 def create_avatar(uuid):

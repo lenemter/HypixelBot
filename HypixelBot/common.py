@@ -3,8 +3,12 @@ import datetime
 from discord import Embed
 from discord.colour import Color
 
-TOKEN = ""  # Discord Bot token — https://discord.com/developers/
-API_KEY = ""  # Hypixel Public API key — /api new on the Hypixel Network @ https://hypixel.net/
+with open("TOKEN.txt", mode="r", encoding="UTF-8") as file:
+    TOKEN = file.read()  # Discord Bot token — https://discord.com/developers/
+
+with open("API_KEY.txt", mode="r", encoding="UTF-8") as file:
+    API_KEY = file.read()  # Hypixel Public API key — /api new on the Hypixel Network @ https://hypixel.net/
+
 DATABASE_PATH = "database/database.db"
 
 # Colors
